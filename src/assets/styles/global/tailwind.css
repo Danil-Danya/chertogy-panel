@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+    --color-purple-dark: #6A3B7B;
+    --color-purple-light: #AA70BF;
+    --color-purple-mid: #86489C;
+    --color-lavender: #EEE0F1;
+    --color-red-main: #E44653;
+    --color-red-accent: #F0515E;
+    --color-red-dark: #742628;
+    --color-red-bright: #D23C48;
+    --color-dark: #1F1821;
+    --color-gray-light: #CDC2D1;
+    --color-green-dark: #4A7548;
+    --color-gray-mid: #545560;
+    --color-blackish: #18171E;
+    --color-deep-dark: #1D1A1E;
+    --color-blue-dark: #233751;
+    --color-blue-mid: #335781;
+
+    --background-image-gradient-purple: linear-gradient(90deg, #CBBECD 0%, #FFF 46.5%, #CBBECD 100%);
+    --background-image-gradient-overlay: linear-gradient(205deg, rgba(87, 27, 109, 0.10) -13.49%, rgba(210, 60, 72, 0.10) 123.39%);
+    --background-image-gradient-dark: linear-gradient(257deg, rgba(90, 51, 98, 0.20) -4.79%, rgba(31, 24, 33, 0.20) 86.4%);
+    --background-image-gradient-soft: linear-gradient(114deg, rgba(54, 38, 38, 0.30) -3.5%, rgba(34, 27, 36, 0.30) 47.08%, rgba(54, 38, 38, 0.30) 97.65%);
+
+
+    --text-h1: 56px;
+    --text-h2: 46px;
+    --text-h3: 32px;
+    --text-p: 18px;
+    --text-small: 14px;
+
+    --breakpoint-xl: 1220px;
+    --breakpoint-lg: 1024px;
+    --breakpoint-md: 768px;
+    --breakpoint-sm: 640px;
+}
