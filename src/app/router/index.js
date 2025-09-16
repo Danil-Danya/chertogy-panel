@@ -43,7 +43,8 @@ const router = createRouter({
             name: 'profile',
             component: () => import('@/pages/Profile.vue'),
             meta: {
-                layout: 'profile'
+                layout: 'profile',
+                title: 'Профиль'
             }
         },
         {
@@ -54,14 +55,14 @@ const router = createRouter({
                 layout: 'profile'
             }
         },
-        // {
-        //     path: '/my-events',
-        //     name: 'my-events', 
-        //     component: () => import('@/pages/'),
-        //     meta: {
-        //         layout: ''
-        //     }
-        // },
+        {
+            path: '/my-events',
+            name: 'my-events', 
+            component: () => import('@/pages/MyEvents.vue'),
+            meta: {
+                layout: 'profile'
+            }
+        },
         {
             path: '/email',
             name: 'email', 
@@ -70,22 +71,24 @@ const router = createRouter({
                 layout: 'login'
             }
         },
-        // {
-        //     path: '',
-        //     name: '', 
-        //     component: () => import('@/pages/'),
-        //     meta: {
-        //         layout: ''
-        //     }
-        // },
-        // {
-        //     path: '',
-        //     name: '', 
-        //     component: () => import('@/pages/'),
-        //     meta: {
-        //         layout: ''
-        //     }
-        // },
+        {
+            path: '/notifications',
+            name: 'notifications', 
+            component: () => import('@/pages/Notification.vue'),
+            meta: {
+                layout: 'profile',
+                title: 'Уведомления'
+            }
+        },
+        {
+            path: '/favorites-masters',
+            name: 'masters', 
+            component: () => import('@/pages/FavoriteMasters.vue'),
+            meta: {
+                layout: 'profile',
+                title: 'Избранные мастера'
+            }
+        },
         // {
         //     path: '',
         //     name: '', 

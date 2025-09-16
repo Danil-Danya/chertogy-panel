@@ -8,7 +8,7 @@
             <div class="login__button-container w-full flex flex-col gap-[20px]">
                 <Button color="purple" text="Войти" class="w-full" />
                 <Button color="blue" text="Войти с помощью ВКонтакте" :icon="VK" class="w-full" />
-                <Button color="purple" text="Зарегистрироваться" class="w-full" />
+                <Button color="purple" text="Зарегистрироваться" type="link" link="/registration" class="w-full" />
             </div>
             <div class="login__link-container flex justify-center !mt-[30px]">
                 <a href="/reset/password" class="login__link text-purple-mid text-[22px]">Забыли пароль?</a>

@@ -1,3 +1,5 @@
+import { ref, onMounted } from "vue";
+
 export const useIsMobile = () => {
     const isMobile = ref(false);
 

@@ -123,9 +123,21 @@ section {
     line-height: 120%; /* 24px */
 }
 
+.profile {
+    background: url('@/assets/images/backgrounds/profile-bg.png') no-repeat center /cover;
+
+    &__sidebar {
+        &-links {
+            &.router-link-active {
+                background: var(--03-dark-3, #422748);
+            }
+        }
+    }
+}
+
 .login {
     background: url('@/assets/images/backgrounds/login-registr-bg.png') no-repeat;
-    background-position: right center; 
+    background-position: top top; 
     background-size: 100%; 
 
     @include media ($md) {
