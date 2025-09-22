@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { checkAuth, checkRoles } from './guards';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,7 +45,8 @@ const router = createRouter({
             component: () => import('@/pages/Profile.vue'),
             meta: {
                 layout: 'profile',
-                title: 'Профиль'
+                title: 'Профиль',
+                auth: 'true',
             }
         },
         {
@@ -52,7 +54,9 @@ const router = createRouter({
             name: 'settings',
             component: () => import('@/pages/Settings.vue'),
             meta: {
-                layout: 'profile'
+                layout: 'profile',
+                title: 'Настройки',
+                auth: 'true',
             }
         },
         {
@@ -77,7 +81,8 @@ const router = createRouter({
             component: () => import('@/pages/Notification.vue'),
             meta: {
                 layout: 'profile',
-                title: 'Уведомления'
+                title: 'Уведомления',
+                auth: 'true',
             }
         },
         {
@@ -86,17 +91,18 @@ const router = createRouter({
             component: () => import('@/pages/FavoriteMasters.vue'),
             meta: {
                 layout: 'profile',
-                title: 'Избранные мастера'
+                title: 'Избранные мастера',
+                auth: 'true',
             }
         },
-        // {
-        //     path: '',
-        //     name: '', 
-        //     component: () => import('@/pages/'),
-        //     meta: {
-        //         layout: ''
-        //     }
-        // },
+        {
+            path: '/user/:id',
+            name: 'Profile by id', 
+            component: () => import('@/pages/AnyUserProfile.vue'),
+            meta: {
+                layout: 'default'
+            }
+        },
         // {
         //     path: '',
         //     name: '', 
@@ -156,4 +162,22 @@ const router = createRouter({
     ],
 })
 
-export default router
+
+router.beforeEach(async (to) => {
+    const requiresAuth = to.meta.auth;
+    const roles = to.meta.roles || [];
+
+    if (requiresAuth) {
+        const isAuth = await checkAuth();
+        if (!isAuth) {
+            return '/login';
+        }
+
+        const hasRole = await checkRoles(roles);
+        if (!hasRole) {
+            return '/permission-denied';
+        }
+    }
+})
+
+export default router;

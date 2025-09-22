@@ -1,16 +1,20 @@
 <template>
     <ul class="profile__sidebar-list w-[280px]">
         <li class="profile__sidebar-li" v-for="link in sidebarLinks" :key="link">
-            <RouterLink :to="link.link" 
+            <component
+                :is="isExternal(link.link) ? 'a' : 'RouterLink'"
+                :to="!isExternal(link.link) ? link.link : null"
+                :href="isExternal(link.link) ? link.link : null"
+                rel="noopener noreferrer"
                 class="profile__sidebar-links items-center gap-[10px] duration-300
-                       block flex !p-[16px_22px] rounded-[10px] hover:bg-purple-dark
-                     border-purple-dark border !mb-[16px] bg-blackish"
+                    block flex !p-[16px_22px] rounded-[10px] hover:bg-purple-dark
+                    border-purple-dark border !mb-[16px] bg-blackish cursor-pointer"
             >
                 <span class="profile__sidebar-icon">
                     <Component :is="link.icon" />
                 </span>
                 <p class="profile__sidebar-text text">{{ link.text }}</p>
-            </RouterLink>
+            </component>
         </li>
     </ul>
 </template>
@@ -29,7 +33,7 @@
         {
             text: 'Профиль',
             icon: Profile,
-            link: '/profile'
+            link: 'profile'
         },
         {
             text: 'Мои события',
@@ -52,5 +56,7 @@
             link: '/settings'
         },
     ])
+
+    const isExternal = (url) => /^https?:\/\//.test(url);
 
 </script>

@@ -148,6 +148,12 @@
             gap: 10px;
         }
 
+        &-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 100%;
+        }
+
         &-link {
             display: block;
             display: flex;
@@ -167,6 +173,11 @@
             line-height: 120%; /* 24px */
             padding: 12px 24px;
         }
+    }
+
+    &__login {
+        display: flex;
+        gap: 10px;
     }
 
     &__dropdown {

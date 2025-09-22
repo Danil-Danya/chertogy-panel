@@ -1,42 +1,29 @@
 <template>
     <div class="masters">
         <div class="masters__container flex flex-wrap gap-[20px]">
-            <FavoriteMastersCard 
-                v-for="master in masters"
-                :key="master"
-                :avatar="master.avatar"
-                :name="master.name"
-            />
+            <RouterLink :to="`/user/${master.id}`" v-if="masters.length > 0" class="block md:w-[calc(50%-20px)] w-full" v-for="master in masters" :key="master">
+                <FavoriteMastersCard :avatar="master.avatar" :name="master.name" />
+            </RouterLink>
+            <h2 class="title !text-left" v-else>На данный момент вы не подписаны не на одного мастера</h2>
         </div>
     </div>
 </template>
 
 <script setup>
 
-    import { reactive } from 'vue';
+    import { computed, reactive } from 'vue';
+    import { useUserStore } from '@/entities/users/model/store';
+
     import FavoriteMastersCard from '@/widgets/cards/FavoriteMastersCard.vue';
 
-    const masters = reactive([
-        {
-            avatar: 'https://png.klev.club/uploads/posts/2024-04/png-klev-club-pkxt-p-billi-kherrington-png-18.png',
-            name: 'Билли Харингтон'
-        },
-        {
-            avatar: 'https://avatars.mds.yandex.net/get-shedevrum/12154803/img_1afb1d9503ab11ef8f3246432d35d758/orig',
-            name: 'Вен Даркхолмн'
-        },
-        {
-            avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzNZhwosZlaHdJri1mX2_1buC-aVb-fVAkUQ&s',
-            name: 'Рикардо мылос'
-        },
-        {
-            avatar: 'https://u.kanobu.ru/editor/images/52/d9b4f706-1b19-4cd1-bad7-e733370a46dc.webp',
-            name: 'Сайтама'
-        },
-        {
-            avatar: 'https://cdn-images.dzcdn.net/images/cover/d22a58a63f39cb6679911f9e6667fb5f/0x1900-000000-80-0-0.jpg',
-            name: 'Дио Брандо'
-        },
-    ])
+    const userStore = useUserStore();
+
+    const masters = computed(() => userStore.profile.following.map(following => {
+        return {
+            id: following.id,
+            name: following.profile.name,
+            avatar: following.profile.avatarPath
+        }
+    }))
 
 </script>

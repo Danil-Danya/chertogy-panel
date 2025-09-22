@@ -1,6 +1,6 @@
 <template>
     <section 
-        class="login md:h-[100vh]"
+        class="login md:min-h-[100vh] !mb-[60px]"
         :class="`login-${page}`"
     >
         <div class="container">

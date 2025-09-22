@@ -58,6 +58,16 @@ section {
     overflow: hidden;
 }
 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 .red {
     color: var(--02-Accent-1, #E44653) !important;
 }
@@ -144,4 +154,8 @@ section {
     background-position: center center;
     background-size: cover; 
   }
+}
+
+input[type="file"] {
+    opacity: 0;
 }

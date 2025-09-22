@@ -4,8 +4,8 @@
     >
         <div class="profile__section-container flex flex-wrap md:flex-nowrap gap-[30px]">
             <div class="profile__section-avatar w-full h-auto md:!w-[256px] md:h-[256px]">
-                <img v-if="profile.profile.avatarPath"
-                    :src="`${imageUrl}/${profile.profile.avatarPath}`" 
+                <img v-if="user.profile.avatarPath"
+                    :src="`${imageUrl}/${user.profile.avatarPath}`" 
                     class="profile__section-avatar-img block rounded-[10px] w-full h-auto md:!w-[256px] md:h-[256px]"
                     alt="Аватарка" 
                 >
@@ -15,8 +15,8 @@
                     alt="Аватарка" 
                 >
             </div>
-            <div class="profile__section-data flex flex-wrap max-w-[550px]">
-                <div class="profile__section-data-item w-[250px] !mb-[30px]" v-for="item in profileData" :key="item">
+            <div class="profile__section-data flex gap-[30px] flex-wrap w-full">
+                <div class="profile__section-data-item max-h-[50px]" v-for="item in profileData" :key="item">
                     <div class="profile__section-data-top">
                         <h3 class="profile__section-title text !text-purple-dark">{{ item.title }}</h3>
                     </div>
@@ -25,20 +25,27 @@
                         <p class="profile__section-text !text-[24px] text" v-else>{{ item.text }}</p>
                     </div>
                 </div>
+                <div class="profile__section-bio">
+                    <h3 class="profile__section-title text !text-purple-dark">Обо мне</h3>
+                    <p class="profile__section-text text" v-if="user.profile.biography">{{ user.profile.biography }}</p>
+                    <p class="profile__section-text text" v-else>Данный пользовател не оставил свою историю</p>
+                </div>
             </div>
         </div>
         <div class="profile__section-content">
-            <div class="profile__section-bio">
-                <h3 class="profile__section-title text !text-purple-dark !mb-[15px]">Обо мне</h3>
-                <p class="profile__section-text text" v-if="profile.profile.biography">{{ profile.profile.biography }}</p>
-                <p class="profile__section-text text" v-else>Вы не оставили вашу историю.</p>
-            </div>
-            <div class="profile__section-card-container flex gap-[30px] !mt-[50px]">
+            <div class="profile__section-card-container flex gap-[30px] !mt-[50px] flex-wrap">
                 <ProfileCard v-for="item in profileCard"
                     :key="item"
                     :title="item.title"
                     :value="item.value"
+                    class="!w-full md:!w-auto"
                 />
+                <div class="profile__follow w-[220px] cursor-pointer">
+                    <p class="profile__follow-text text !text-gray-mid text-right">Получать уведомления о событиях мастера</p>
+                    <span>
+                        
+                    </span>
+                </div>
             </div>
         </div>
     </div>
@@ -56,42 +63,37 @@
     const imageUrl = import.meta.env.VITE_APP_IMAGE_URL;
 
     const userStore = useUserStore();
-    const profile = userStore.profile
+    const user = userStore.user;
 
     const profileData = reactive([
         {
             title: 'Имя',
-            text: profile.profile.name
+            text: user.profile.name
         },
         {
             title: 'Ссылка на соц. сети',
-            text: profile.profile.socialLink,
-            link: profile.profile.socialLink
-        },
-        {
-            title: 'Телефон',
-            text: profile.profile.phone,
-            link: `tel:${profile.profile.phone}`
-        },
-        {
-            title: 'Email',
-            text: profile.email,
-            link: `mailto:${profile.email}`
+            text: user.profile.socialLink || 'Сыллка не была оставлена',
+            link: user.profile.socialLink
         },
         {
             title: 'Дата регистрации',
-            text: `${profile.createdAt.split('T')[0]}, ${profile.createdAt.split('T')[1].split('.')[0]}`,
+            text: `${user.createdAt.split('T')[0]}, ${user.createdAt.split('T')[1].split('.')[0]}`,
         },
     ])
 
     const profileCard = reactive([
         {
             title: 'Стаж',
-            value: `${getDaysSinceRegistration(profile.createAt)} дней`
+            value: `${getDaysSinceRegistration(user.createAt)} дней`
         },
         {
             title: 'Участник',
             value: '0 событий'
+        },
+        {
+            title: 'Провёл',
+            value: '0 событий',
+            roles: ['MASTER', 'ADMIN']
         },
     ])
 

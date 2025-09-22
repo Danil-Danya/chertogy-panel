@@ -12,7 +12,8 @@
             'bg-purple-mid hover:bg-purple-light': color === 'purple',
             'bg-blue-mid hover:bg-blue-dark': color === 'blue',
             'bg-yellow-600': color === 'yellow',
-            'bg-green-500': color === 'green'
+            'bg-green-dark': color === 'green',
+            'bg-gray-mid': color === 'gray'
         }"
     >
         <span class="button__icon block w-[24px] h-[24px]" v-if="icon">

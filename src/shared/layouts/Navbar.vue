@@ -30,12 +30,25 @@
                     </nav>
                 </div>
                 <div class="navbar__right">
-                    <a href="/login" class="navbar__button-link">
-                        <span class="navbar__button-icon">
-                            <UserIcon />
-                        </span>
-                        Войти
-                    </a>
+                    <div class="navbar__login" v-if="profile">
+                        <a href="/profile" class="navbar__button-link">
+                            <img :src="`${imageUrl}/${profile.profile.avatarPath}`" alt="Аватарка" class="navbar__button-img">
+                        </a>
+                        <a href="/login" class="navbar__button-link" @click.prevent.stop="logout">
+                            <span class="navbar__button-icon">
+                                <UserIcon />
+                            </span>
+                            Выйти
+                        </a>
+                    </div>
+                    <div class="navbar__logout" v-else>
+                        <a href="/login" class="navbar__button-link">
+                            <span class="navbar__button-icon">
+                                <UserIcon />
+                            </span>
+                            Войти
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -44,12 +57,20 @@
 
 <script setup>
 
-    import { ref } from 'vue';
+    import { computed, onMounted, ref } from 'vue';
+    import { useRouter } from 'vue-router';
+    import { useUserStore } from '@/entities/users/model/store';
 
     import VKIcon from '@/shared/icons/navbar/VK.vue';
     import TGIcon from '@/shared/icons/navbar/Telegram.vue';
     import UserIcon from '@/shared/icons/navbar/User.vue';
 
+    const userStore = useUserStore();
+    const router = useRouter();
+
+    const profile = computed(() => userStore.profile);
+
+    const imageUrl = import.meta.env.VITE_APP_IMAGE_URL;
 
     const navLinks = ref([
         { text: 'О клубе', path: '/' },
@@ -63,6 +84,15 @@
         { icon: TGIcon, path: 'https://t.me/ChertogiGeroev_Club' },
         { icon: VKIcon, path: 'https://vk.com/chertogi.club' },
     ])
+
+    onMounted(async () => await userStore.fetchProfile());
+
+    const logout = () => {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+
+        router.replace('/login')
+    }
 
 </script>
 

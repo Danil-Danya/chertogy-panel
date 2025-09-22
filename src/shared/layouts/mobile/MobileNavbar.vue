@@ -18,11 +18,14 @@
                 </div>
                 <div class="navbar__right">
                     <div class="navbar__button-container">
-                        <a href="/login" class="navbar__button">
+                        <a href="/login" class="navbar__button" v-if="!profile">
                             <span class="navbar__button-icon">
                                 <UserIcon />
                             </span>
                             <p class="navbar__buttons-text">Войти</p>
+                        </a>
+                        <a href="/profile" class="navbar__button-link" v-else>
+                            <img :src="`${imageUrl}/${profile.profile.avatarPath}`" alt="Аватарка" class="navbar__button-img">
                         </a>
                         <TransitionGroup name="nav-button">
                             <button class="navbar__button" v-show="!isActiveDropDown" @click="toggleActiveDropdown">
@@ -42,15 +45,19 @@
         </div>
     </section>
     <Transition name="nav-dropdown">
-        <NavbarMobileDropDown v-show="isActiveDropDown" @closeDropdown="isActiveDropDown=false" />
+        <NavbarMobileDropDown v-show="isActiveDropDown" @closeDropdown="isActiveDropDown=false" v-if="!profile" />
+        <NavbarMobileDropdownProfile v-show="isActiveDropDown" @closeDropdown="isActiveDropDown=false" v-else />
     </Transition>
 </template>
 
 <script setup>
 
-    import { ref } from 'vue';
+    import { ref, computed, onMounted } from 'vue';
+    import { useRouter } from 'vue-router';
+    import { useUserStore } from '@/entities/users/model/store';
 
     import NavbarMobileDropDown from '@/widgets/dropdowns/NavbarMobileDropdown.vue';
+    import NavbarMobileDropdownProfile from '@/widgets/dropdowns/NavbarMobileDropdownProfile.vue';
 
     import VKIcon from '@/shared/icons/navbar/VK.vue';
     import TGIcon from '@/shared/icons/navbar/Telegram.vue';
@@ -58,7 +65,16 @@
     import ToggleCloseIcon from '@/shared/icons/navbar/ToggleClose.vue';
     import UserIcon from '@/shared/icons/navbar/User.vue';
 
+    const userStore = useUserStore();
+    const router = useRouter();
+
+    const profile = computed(() => userStore.profile);
+
+    const imageUrl = import.meta.env.VITE_APP_IMAGE_URL;
+
     const isActiveDropDown = ref(false);
+
+    onMounted(async () => await userStore.fetchProfile());
 
     const navbarSocialLinks = ref([
         { icon: VKIcon, path: 'https://vk.com/chertogi.club' },

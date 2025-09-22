@@ -6,7 +6,7 @@
     >
         <div class="masters__card-content flex gap-[15px] flex-wrap items-center">
             <div class="masters__card-avatar">
-                <img :src="avatar" alt="Аватарка" class="h-[50px] w-[50px] rounded-[100%] border-[2px] border-blue-dark">
+                <img :src="`${imgPath}/${avatar}`" alt="Аватарка" class="h-[50px] w-[50px] rounded-[100%] border-[2px] border-blue-dark">
             </div>
             <div class="masters__card-info">
                 <p class="masters__card-name text">{{ name }}</p>
@@ -16,6 +16,8 @@
 </template>
 
 <script setup>
+
+    const imgPath = import.meta.env.VITE_APP_IMAGE_URL;
 
     const props = defineProps({
         avatar: {
