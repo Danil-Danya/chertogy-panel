@@ -4,9 +4,10 @@
 
         <div class="input__wrapper">
             <input 
-                :id="id" 
-                :type="type" 
-                :value="modelValue" 
+                :id="id"
+                ref="inputRef"
+                :type="type"
+                :value="modelValue"
                 :placeholder="placeholder"
                 @input="onInput"
                 @blur="onBlur"
@@ -37,7 +38,10 @@
 
 <script setup>
 
+    import IMask from "imask";
+
     import { defineEmits } from 'vue';
+    import { ref, onMounted } from 'vue';
 
     const props = defineProps({
         label: {
@@ -75,8 +79,34 @@
     })
 
     const emit = defineEmits(['update:modelValue', 'blur']);
-    
-    const onInput = (e) => emit('update:modelValue', e.target.value);
     const onBlur = (e) => emit('blur', e);
+
+    const inputRef = ref(null);
+    let mask;
+
+    onMounted(() => {
+        if (props.type === "tel") {
+            mask = IMask(inputRef.value, {
+                mask: "+{7} (000) 000-00-00",
+            });
+
+            // inputRef.value.addEventListener("input", () => {
+            //     if (inputRef.value.value.startsWith("8")) {
+            //         inputRef.value.value = "+7" + inputRef.value.value.slice(1);
+            //         mask.updateValue();
+            //     }
+            // });
+
+            mask.on("accept", () => {
+                emit("update:modelValue", mask.value);
+            });
+        }
+    });
+
+    const onInput = (e) => {
+        if (!mask) {
+            emit("update:modelValue", e.target.value);
+        }
+    };
 
 </script>

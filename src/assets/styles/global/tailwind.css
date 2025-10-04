@@ -18,13 +18,16 @@
     --color-blue-dark: #233751;
     --color-blue-mid: #335781;
 
+    --color-pink-bright: #FF7E7E;
+    --color-brown-mid: #886535;
+    --color-green-mid: #4A7548;
+
     --default-gradient: linear-gradient(103.75% 60.01% at 51.36% 54.36%, rgba(44, 38, 47, 0.30) 0%, rgba(21, 21, 22, 0.30) 100%);
 
     --background-image-gradient-purple: linear-gradient(90deg, #CBBECD 0%, #FFF 46.5%, #CBBECD 100%);
     --background-image-gradient-overlay: linear-gradient(205deg, rgba(87, 27, 109, 0.10) -13.49%, rgba(210, 60, 72, 0.10) 123.39%);
     --background-image-gradient-dark: linear-gradient(257deg, rgba(90, 51, 98, 0.20) -4.79%, rgba(31, 24, 33, 0.20) 86.4%);
     --background-image-gradient-soft: linear-gradient(114deg, rgba(54, 38, 38, 0.30) -3.5%, rgba(34, 27, 36, 0.30) 47.08%, rgba(54, 38, 38, 0.30) 97.65%);
-
 
     --text-h1: 56px;
     --text-h2: 46px;

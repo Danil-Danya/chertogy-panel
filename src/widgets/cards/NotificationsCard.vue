@@ -8,14 +8,20 @@
         }"
         :class="{
             'border-red-bright': color === 'red',
-            'border-green-dark': color === 'green',
-            'border-yellow-700': color === 'yellow'
+            'border-green-mid': color === 'green',
+            '!border-brown-mid': color === 'yellow'
         }"
     >
-        <div class="notifications__card-content flex gap-[5px] flex-wrap">
+        <div class="notifications__card-content flex gap-[5px] flex-wrap" v-if="color">
             <p class="text !text-blue-mid !font-[700]">{{ subject }}</p>
             <p class="text !font-[700]">{{ action }}</p>
             <p class="text !text-red-bright !font-[700]">{{ target }}</p>
+        </div>
+
+        <div class="notifications__card-content flex gap-[5px] flex-wrap" v-else>
+            <p class="text !text-gray-mid !font-[700]">{{ subject }}</p>
+            <p class="text !text-gray-mid !font-[700]">{{ action }}</p>
+            <p class="text !text-gray-mid !font-[700]">{{ target }}</p>
         </div>
     </div>
 </template>

@@ -7,7 +7,7 @@
             </div>
             <div class="login__button-container w-full flex flex-col gap-[20px]">
                 <Button color="purple" text="Войти" class="w-full" @click.prevent.stop="submitLogin" />
-                <Button color="blue" text="Войти с помощью ВКонтакте" :icon="VK" class="w-full" />
+                <Button color="blue" text="Войти с помощью ВКонтакте" :icon="LoginIcon" class="w-full" @click.prevent.stop="loginWithVK" />
                 <Button color="purple" text="Зарегистрироваться" type="link" link="/registration" class="w-full" />
             </div>
             <div class="login__link-container flex justify-center !mt-[30px]">
@@ -28,7 +28,7 @@
     import Button from '@/shared/ui/Button.vue';
     import PasswordInput from '@/shared/ui/PasswordInput.vue';
 
-    import VK from '@/shared/icons/navbar/VK.vue';
+    import LoginIcon from '@/shared/icons/login/LoginIcon.vue';
 
     const loginPayload = reactive({
         email: '',
@@ -39,6 +39,14 @@
     const errorPassword = ref({});
 
     const router = useRouter();
+
+    const loginWithVK = () => {
+        const appId = import.meta.env.VITE_VK_APP_ID;
+        const redirectUri = encodeURIComponent(import.meta.env.VITE_VK_REDIRECT_URI);
+
+        window.location.href = `https://id.vk.com/authorize?client_id=${appId}&redirect_uri=${redirectUri}&response_type=code&scope=email`;
+    };
+
 
     const submitLogin = async () => {
         try {

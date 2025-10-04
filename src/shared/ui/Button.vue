@@ -12,11 +12,11 @@
             'bg-purple-mid hover:bg-purple-light': color === 'purple',
             'bg-blue-mid hover:bg-blue-dark': color === 'blue',
             'bg-yellow-600': color === 'yellow',
-            'bg-green-dark': color === 'green',
-            'bg-gray-mid': color === 'gray'
+            'bg-green-dark hover:bg-green-700': color === 'green',
+            'bg-gray-mid hover:bg-gray-500': color === 'gray'
         }"
     >
-        <span class="button__icon block w-[24px] h-[24px]" v-if="icon">
+        <span class="button__icon block w-[24px] h-[24px] flex justify-center items-center" v-if="icon">
             <Component :is="icon" />
         </span>
         <p class="button__text">{{ text }}</p>

@@ -33,12 +33,13 @@ const getProfile = async () => {
     }
 };
 
-const resetPassword = async () => {
+const resetPassword = async (payload) => {
     try {
-
+        const response = await api.post('/recovery/password', payload);
+        return response;
     } 
     catch (error) {
-        console.log(error);
+        throw error;
     }
 };
 

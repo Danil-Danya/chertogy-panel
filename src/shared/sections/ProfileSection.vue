@@ -21,7 +21,7 @@
                         <h3 class="profile__section-title text !text-purple-dark">{{ item.title }}</h3>
                     </div>
                     <div class="profile__section-data-bottom !mt-[10px]">
-                        <a :href="item.link" class="profile__section-link !text-[24px] text" v-if="item.link">{{ item.text }}</a>
+                        <a :href="item.link" class="profile__section-link !text-[24px] text hover:!text-purple-light" v-if="item.link">{{ item.text }}</a>
                         <p class="profile__section-text !text-[24px] text" v-else>{{ item.text }}</p>
                     </div>
                 </div>
@@ -38,6 +38,7 @@
                     :key="item"
                     :title="item.title"
                     :value="item.value"
+                    :color="item.color"
                 />
             </div>
         </div>
@@ -46,27 +47,30 @@
 
 <script setup>
 
-    import { reactive } from 'vue';
+    import { reactive, ref } from 'vue';
     import { useUserStore } from '@/entities/users/model/store';
 
     import getDaysSinceRegistration from '@/utils/getDaysSinceRegistration';
+    import truncateString from '@/utils/truncateString';
 
     import ProfileCard from '@/widgets/cards/ProfileCard.vue';
 
     const imageUrl = import.meta.env.VITE_APP_IMAGE_URL;
 
     const userStore = useUserStore();
-    const profile = userStore.profile
+    const profile = userStore.profile;
+
+    const maxLengthForUserData = 25;
 
     const profileData = reactive([
         {
             title: 'Имя',
-            text: profile.profile.name
+            text: truncateString(profile.profile.name, maxLengthForUserData)
         },
         {
             title: 'Ссылка на соц. сети',
-            text: profile.profile.socialLink,
-            link: profile.profile.socialLink
+            text: truncateString(profile.profile.socialLink, maxLengthForUserData),
+            link: profile.profile.socialLink 
         },
         {
             title: 'Телефон',
@@ -75,23 +79,28 @@
         },
         {
             title: 'Email',
-            text: profile.email,
+            text: truncateString(profile.email, maxLengthForUserData),
             link: `mailto:${profile.email}`
         },
         {
             title: 'Дата регистрации',
-            text: `${profile.createdAt.split('T')[0]}, ${profile.createdAt.split('T')[1].split('.')[0]}`,
+            text: (() => {
+                const [year, month, day] = profile.createdAt.split('T')[0].split('-');
+                return `${day}.${month}.${year.slice(-2)}`;
+            })()
         },
     ])
 
     const profileCard = reactive([
         {
             title: 'Стаж',
-            value: `${getDaysSinceRegistration(profile.createAt)} дней`
+            value: `${getDaysSinceRegistration(profile.createdAt)} дней`,
+            color: 'linear-gradient(257deg, rgba(134, 72, 156, 0.20) -4.79%, rgba(58, 58, 58, 0.20) 86.4%)'
         },
         {
             title: 'Участник',
-            value: '0 событий'
+            value: '0 событий',
+            color: 'linear-gradient(257deg, rgba(51, 87, 129, 0.20) -4.79%, rgba(58, 58, 58, 0.20) 86.4%)'
         },
     ])
 

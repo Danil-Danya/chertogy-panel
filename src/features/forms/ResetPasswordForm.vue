@@ -5,22 +5,54 @@
                 <h2 class="reset__title">Введите email, к которому привязан аккаунт</h2>
             </div>
             <div class="reset__inputs md:w-[50%] w-full !mt-[20px] md:!mt-0">
-                <Input type="email" placeholder="example@mail.ru" />
+                <Input v-model="payload.email" type="email" placeholder="example@mail.ru" :message="fieldMessage(v$.email)|| emailBackendMessage" @blur="v$.email.$touch()" />
             </div>
         </div>
         <div class="reset__form-button flex justify-center">
-            <Button color="purple" text="Восстановить" class="!w-[400px]" />
+            <Button color="purple" text="Восстановить" class="!w-[400px]" @click.prevent.stop="recoveryPassword" />
         </div>
     </form>
 </template>
 
 <script setup>
 
-    import { reactive } from 'vue';
+    import { reactive, ref } from 'vue';
+    import { useRouter } from 'vue-router';
+    import { resetPassword } from '@/entities/users/lib/api';
+    import { resetPasswordRules } from '@/entities/users/model/form';
+    import { useValidation } from '@/composables/useValidation';
 
     import Input from '@/shared/ui/Input.vue';
     import Button from '@/shared/ui/Button.vue';
 
-    const email = reactive('');
+    const router = useRouter();
+    
+    const payload = reactive({ email: '' });
+    const validate = useValidation(resetPasswordRules, payload);
+
+    const emailBackendMessage = ref({});
+
+    const v$ = validate.v$;
+    const fieldMessage = validate.fieldMessage;
+
+    const recoveryPassword = async () => {
+        try {
+            const isValid = await v$.value.$validate();
+            if (!isValid) {
+                return;
+            }
+
+            const resetedPassword = await resetPassword(payload);
+            if (resetedPassword) {
+                router.replace('/reseted-password')
+            }
+        }
+        catch (error) {
+            console.log(error);
+
+            emailBackendMessage.value.type = 'error';
+            emailBackendMessage.value.text = error.response.data.message;
+        }
+    }
 
 </script>

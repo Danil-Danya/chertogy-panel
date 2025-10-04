@@ -91,6 +91,7 @@
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
 
+        userStore.$reset();
         router.replace('/login')
     }
 

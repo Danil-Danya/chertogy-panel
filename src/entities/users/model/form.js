@@ -1,23 +1,43 @@
-import { helpers, required, email, minLength, sameAs } from "@vuelidate/validators";
+import { helpers, required, email, minLength, maxLength, sameAs } from "@vuelidate/validators";
 
 const registrationRules = (form) => ({
     login: {
         required: helpers.withMessage("Введите логин", required),
-        startsWithAt: helpers.withMessage("Логин должен начинаться с @", (value) => !!value && value.startsWith("@")),
+        maxLength: helpers.withMessage("Логин не может быть длиннее 15 символов", maxLength(15)),
     },
     
     name: {
         required: helpers.withMessage("Введите имя", required),
+        maxLength: helpers.withMessage("Имя не может быть длиннее 15 символов", maxLength(15)),
     },
 
     phone: {
         required: helpers.withMessage("Введите телефон", required),
-        phoneFormat: helpers.withMessage("Введите телефон в формате +79999999999", (value) => !!value && /^\+7\d{10}$/.test(`${value}`)),
     },
 
     email: {
         required: helpers.withMessage("Введите почту", required),
         email: helpers.withMessage("Неверный формат почты", email),
+        maxLength: helpers.withMessage("Почта не может быть длиннее 25 символов", maxLength(25)),
+    },
+
+    socialLink: {
+        required: helpers.withMessage("Введите ссылку на страницу ВК или Телеграмм", required),
+        maxLength: helpers.withMessage("Ссылка не может быть длиннее 25 символов", maxLength(25)),
+        socialFormat: helpers.withMessage(
+            "Введите корректную ссылку (https://vk.com/... или https://t.me/... или @username)",
+            (value) =>
+                !value || 
+                /^https?:\/\/(vk\.com|t\.me)\/[A-Za-z0-9_]+$/i.test(value) || 
+                /^@[A-Za-z0-9_]+$/i.test(value)
+        ),
+    },
+
+    biography: {
+        biographyLength: helpers.withMessage(
+            "Не более 350 символов, включая пробелы",
+            (value) => !value || value.length <= 350
+        ),
     },
 
     password: {
@@ -46,19 +66,21 @@ const registrationRules = (form) => ({
     },
 })
 
-const resetPasswordRules = () => ({
-    
+const resetPasswordRules = (form) => ({
+    email: {
+        required: helpers.withMessage("Введите почту", required),
+        email: helpers.withMessage("Неверный формат почты", email),
+    },
 })
 
 const profileRules = (form) => ({
     name: {
         required: helpers.withMessage("Введите имя", required),
+        maxLength: helpers.withMessage("Имя не может быть длиннее 15 символов", maxLength(15)),
+
     },
     phone: {
-        phoneFormat: helpers.withMessage(
-            "Введите телефон в формате +79999999999",
-            (value) => !value || /^\+7\d{10}$/.test(value)
-        ),
+        required: helpers.withMessage("Введите телефон", required),
     },
     biography: {
         biographyLength: helpers.withMessage(
@@ -68,25 +90,25 @@ const profileRules = (form) => ({
     },
     socialLink: {
         socialFormat: helpers.withMessage(
-            "Введите корректную ссылку (https:// или @username)",
+            "Введите корректную ссылку (https://vk.com/... или https://t.me/... или @username)",
             (value) =>
-                !value ||
-                /^(https?:\/\/[^\s]+|@[A-Za-z0-9_]+)$/i.test(value)
+                !value || 
+                /^https?:\/\/(vk\.com|t\.me)\/[A-Za-z0-9_]+$/i.test(value) || 
+                /^@[A-Za-z0-9_]+$/i.test(value)
         ),
     },
+    maxLength: helpers.withMessage("Ссылка не может быть длиннее 25 символов", maxLength(25)),
 });
 
 const userRules = (form) => ({
     login: {
         required: helpers.withMessage("Введите логин", required),
-        startsWithAt: helpers.withMessage(
-            "Логин должен начинаться с @",
-            (value) => !!value && value.startsWith("@")
-        ),
+        maxLength: helpers.withMessage("Логин не может быть длиннее 15 символов", maxLength(15)),
     },
     email: {
         required: helpers.withMessage("Введите почту", required),
         email: helpers.withMessage("Неверный формат почты", email),
+        maxLength: helpers.withMessage("Почта не может быть длиннее 25 символов", maxLength(25)),
     },
     password: {
         minLength: helpers.withMessage(

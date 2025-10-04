@@ -172,6 +172,10 @@
             font-weight: 500;
             line-height: 120%; /* 24px */
             padding: 12px 24px;
+
+            &:hover {
+                background: var(--plate-03, linear-gradient(114deg, rgba(54, 38, 38, 0.596) -3.5%, rgba(34, 27, 36, 0.521) 47.08%, rgba(54, 38, 38, 0.30) 97.65%));
+            }
         }
     }
 

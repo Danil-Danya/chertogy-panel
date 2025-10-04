@@ -17,6 +17,14 @@ const router = createRouter({
             }
         },
         {
+            path: '/reseted-password',
+            name: 'reseted password',
+            component: () => import('@/pages/ResetedPassword.vue'),
+            meta: {
+                layout: 'login'
+            }
+        },
+        {
             path: '/login',
             name: 'login',component: () => import('@/pages/Login.vue'),
             meta: {
@@ -99,6 +107,14 @@ const router = createRouter({
             path: '/user/:id',
             name: 'Profile by id', 
             component: () => import('@/pages/AnyUserProfile.vue'),
+            meta: {
+                layout: 'default'
+            }
+        },
+        {
+            path: '/privacy-policy',
+            name: 'Privacy Policy', 
+            component: () => import('@/pages/PrivacyPolicy.vue'),
             meta: {
                 layout: 'default'
             }

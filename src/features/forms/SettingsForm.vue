@@ -5,35 +5,38 @@
                 <div class="settings__form-file md:max-w-[252px] w-full">
                     <FileUpload @update:file="onFileSelected" />
                 </div>
-                <div class="settings__form-inputs flex flex-wrap gap-[15px]">
-                    <Input v-model="payloadProfile.name" 
-                        label="Имя пользователя" 
-                        placeholder="Введите имя пользователя" 
-                        class="md:!w-[45%]" 
-                        :message="fieldMessageProfile(vProfile$.name)" 
-                        @blur="vProfile$.name.$touch()" 
-                    />
-                    <Input v-model="payloadUser.login" 
-                        label="Логин" 
-                        placeholder="Введите логин" 
-                        class="md:!w-[45%]" 
-                        :message="fieldMessageUser(vUser$.login)" 
-                        @blur="vUser$.login.$touch()" 
-                    />
-                    <Input v-model="payloadProfile.phone" 
-                        label="Телефон" 
-                        placeholder="Введите телефон" 
-                        class="md:!w-[45%]" 
-                        :message="fieldMessageProfile(vProfile$.phone) || { type: 'warning', text: 'Виден только администрации' }" 
-                        @blur="vProfile$.phone.$touch()" 
-                    />
-                    <Input v-model="payloadUser.email" 
-                        label="Email" 
-                        placeholder="Введите email" 
-                        class="md:!w-[45%]" 
-                        :message="fieldMessageUser(vUser$.email) || { type: 'warning', text: 'Виден только администрации' }" 
-                        @blur="vUser$.email.$touch()" 
-                    />
+                <div class="">
+                    <h2 class="settings__title text-purple-light text-[32px]">Личная информация</h2>
+                    <div class="settings__form-inputs flex flex-wrap gap-[15px]">
+                        <Input v-model="payloadProfile.name" 
+                            label="Имя пользователя" 
+                            placeholder="Введите имя пользователя" 
+                            class="md:!w-[45%]" 
+                            :message="fieldMessageProfile(vProfile$.name)" 
+                            @blur="vProfile$.name.$touch()" 
+                        />
+                        <Input v-model="payloadUser.login" 
+                            label="Логин" 
+                            placeholder="Введите логин" 
+                            class="md:!w-[45%]" 
+                            :message="fieldMessageUser(vUser$.login)" 
+                            @blur="vUser$.login.$touch()" 
+                        />
+                        <Input v-model="payloadProfile.phone" 
+                            label="Телефон" 
+                            placeholder="Введите телефон" 
+                            class="md:!w-[45%]" 
+                            :message="fieldMessageProfile(vProfile$.phone) || { type: 'warning', text: 'Виден только администрации' }" 
+                            @blur="vProfile$.phone.$touch()" 
+                        />
+                        <Input v-model="payloadUser.email" 
+                            label="Email" 
+                            placeholder="Введите email" 
+                            class="md:!w-[45%]" 
+                            :message="fieldMessageUser(vUser$.email) || { type: 'warning', text: 'Виден только администрации' }" 
+                            @blur="vUser$.email.$touch()" 
+                        />
+                    </div>
                 </div>
             </div>
             <div class="settings__form-middle flex gap-[15px] !mt-[20px] flex-wrap md:flex-now">
@@ -44,7 +47,8 @@
                         placeholder="Пусть весь мир узнает" 
                         class="!mb-[15px]" 
                         :counter="`${areaSymbols}/${areaSymbolsMax}`" 
-                        :message="{ type: 'warning', text: 'Не более 350 символов, включая пробелы' }" 
+                        :message="fieldMessageProfile(vProfile$.biography) || { type: 'warning', text: 'Не более 350 символов, включая пробелы' }" 
+                        @blur="vProfile$.biography.$touch"
                     />
                 </div>
                 <div class="settings__form-inputs md:w-[30%] w-full">
@@ -79,16 +83,15 @@
                 <div class="settings__form-button flex gap-[15px] !mt-[20px] flex-wrap md:flex-nowrap">
                     <Button 
                         color="green" 
-                        text="Новые настройки применены" 
-                        :icon="!isMobile ? Ok : null" 
+                        text="Применить" 
                         @click.prevent.stop="submitAllData()" 
                         class="!text-[18px]" 
                     />
                     <Button 
                         color="gray" 
-                        text="Отмена" 
+                        text="В профиль" 
                         class="md:max-w-[260px] !text-[18px]" 
-                        @click.prevent.stop="goToBackPage"
+                        @click.prevent.stop="goToProfile"
                     />
                 </div>
             </div>
@@ -114,15 +117,13 @@
     import FileUpload from '@/shared/ui/FileUpload.vue';
     import PasswordInput from '@/shared/ui/PasswordInput.vue';
 
-    import Ok from '@/shared/icons/settings/Ok.vue';
-
     const userStore = useUserStore();
     const router = useRouter();
     const isMobile = useIsMobile();
 
     const user = userStore.profile;
 
-    const areaSymbols = computed(() => 0);
+    const areaSymbols = computed(() => payloadProfile.biography?.length || 0);
     const areaSymbolsMax = computed(() => 350);
 
     const payloadUser = reactive({
@@ -171,13 +172,14 @@
     }
 
     const submitAllData = async () => {
-        vUser$.$touch();
-        vProfile$.$touch();
+        vUser$.value.$touch();
+        vProfile$.value.$touch();
 
         if (vUser$.$invalid || vProfile$.$invalid) {
             return;
         }
 
+        payloadUser.password = payloadUser.password ? payloadUser.password : undefined;
         const updatedUser = await updateUserById(user.id, payloadUser);
         if (!updatedUser) {
             return;
@@ -190,11 +192,11 @@
             return;
         }
 
-        window.location.reload();
+        router.replace('/profile');
     }
 
-    const goToBackPage = () => {
-        router.go(-1);
+    const goToProfile = () => {
+        router.replace('/profile');
     }
 
 </script>

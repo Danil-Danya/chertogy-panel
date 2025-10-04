@@ -1,7 +1,7 @@
 <template>
     <section class="profile min-h-[100vh] !pt-[150px] !pb-[60px]">
         <div class="container">
-            <div class="profile__container flex flex-wrap gap-[30px]">
+            <div class="profile__container flex flex-wrap items-center gap-[30px]">
                 <h1 class="title !text-left">{{ title }}</h1>
                 <div class="profile__user flex gap-[10px]">
                     <p class="profile__name text-[32px] text-purple-dark">{{ profile.profile.name }}</p>
@@ -39,7 +39,6 @@
 
     onMounted(async () => {
         await userStore.fetchProfile();
-        
     });
 
     const title = computed(() => route.meta.title);

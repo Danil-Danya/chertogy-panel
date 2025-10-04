@@ -12,7 +12,9 @@
                 />
             </div>
             <div class="notifications__watched !mb-[60px]">
-                <h2 class="title !text-left !m-[70px_0_40px_0] notifications__title">Просмотренные уведомления</h2>
+                <h2 class="!text-left !m-[70px_0_40px_0] notifications__title !text-gray-mid text-[48px]">
+                    Просмотренные уведомления
+                </h2>
                 <NotificationsCard
                     v-for="card in notifications"
                     :key="card"
