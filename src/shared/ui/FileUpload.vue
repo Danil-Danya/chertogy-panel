@@ -20,7 +20,7 @@
                     'text-red-500': fileError
                 }"
             >
-                Формат jpeg, jpg, png, весом не более 10 MB и размером не более 2000 × 200
+                Формат jpeg, jpg, png, весом не более 10 MB и размером не более 3000 × 3000
             </p>
         </div>
     </div>
@@ -67,7 +67,7 @@
                 const img = new Image();
 
                 img.onload = () => {
-                    resolve(img.width <= 2000 && img.height <= 2000);
+                    resolve(img.width <= 3000 && img.height <= 3000);
                 };
 
                 img.onerror = () => resolve(false);

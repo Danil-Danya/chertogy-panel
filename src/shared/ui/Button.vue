@@ -13,7 +13,8 @@
             'bg-blue-mid hover:bg-blue-dark': color === 'blue',
             'bg-yellow-600': color === 'yellow',
             'bg-green-dark hover:bg-green-700': color === 'green',
-            'bg-gray-mid hover:bg-gray-500': color === 'gray'
+            'bg-gray-mid hover:bg-gray-500': color === 'gray',
+            'bg-red-bright hover:bg-red-dark': color === 'red'
         }"
     >
         <span class="button__icon block w-[24px] h-[24px] flex justify-center items-center" v-if="icon">
@@ -34,7 +35,7 @@
         },
 
         color: {
-            type: Object,
+            type: String,
             required: true
         },
 

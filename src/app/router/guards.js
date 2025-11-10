@@ -4,8 +4,6 @@ import { useUserStore } from "@/entities/users/model/store";
 const checkAuth = async () => {
     try {
         const profile = await getProfile();
-        console.log(profile);
-        
         return profile?.status === 200;
     }
     catch (error) {
@@ -19,7 +17,7 @@ const checkRoles = async (allowedRoles=[]) => {
         const userStore = useUserStore();
         
         await userStore.fetchProfile();
-        const profile = userStore.profile.profile;
+        const profile = userStore.profile;
 
         if (!profile) {
             return false;

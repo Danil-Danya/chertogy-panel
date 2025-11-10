@@ -90,13 +90,6 @@
                 mask: "+{7} (000) 000-00-00",
             });
 
-            // inputRef.value.addEventListener("input", () => {
-            //     if (inputRef.value.value.startsWith("8")) {
-            //         inputRef.value.value = "+7" + inputRef.value.value.slice(1);
-            //         mask.updateValue();
-            //     }
-            // });
-
             mask.on("accept", () => {
                 emit("update:modelValue", mask.value);
             });

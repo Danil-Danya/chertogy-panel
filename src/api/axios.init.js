@@ -25,9 +25,9 @@ api.interceptors.request.use((request) => {
         request.data = convertToSnakeCase(request.data);
     }
 
-    if (request.params) {
-        request.params = convertToSnakeCase(request.params);
-    }
+    // if (request.params) {
+    //     request.params = convertToSnakeCase(request.params);
+    // }
 
     if (localStorage.getItem('accessToken')) {
         request.headers = {

@@ -55,7 +55,8 @@
                 <span class="profile__follow-icon block !p-[16px] rounded-[10px] max-h-[64px]"
                     style="background: linear-gradient(257deg, rgba(51, 87, 129, 0.20) -4.79%, rgba(58, 58, 58, 0.20) 86.4%);"
                 >
-                    <NotificationIcon />
+                    <NotificationIcon v-if="!isNotificated" />
+                    <ActiveNotificationIcon v-else />
                 </span>
             </div>
         </div>
@@ -74,6 +75,7 @@
     import ProfileCard from '@/widgets/cards/ProfileCard.vue';
 
     import NotificationIcon from '@/shared/icons/profile/notification/Notification.vue';
+    import ActiveNotificationIcon from '@/shared/icons/profile/notification/ActiveNotification.vue';
     import OnStarIcon from '@/shared/icons/user/OnStar.vue';
     import OffStarIcon from '@/shared/icons/user/OffStar.vue';
 

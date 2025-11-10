@@ -14,7 +14,7 @@ const rolesHelper = {
     admin: {
         original: 'ADMIN',
         eng: 'Admin',
-        ru: 'Администратор'
+        ru: 'Админ'
     },
 }
 

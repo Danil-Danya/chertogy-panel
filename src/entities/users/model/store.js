@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { getOneUserById, getProfile } from "../lib/api";
+import { getAllUsers, getOneUserById, getProfile } from "../lib/api";
 
 export const useUserStore = defineStore('users', {
     state: () => ({
@@ -16,6 +16,10 @@ export const useUserStore = defineStore('users', {
 
         async fetchUser (id) {
             this.user = await getOneUserById(id);
+        },
+
+        async fetchUsers (params) {
+            this.users = await getAllUsers(params);
         }
     }
 })

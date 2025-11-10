@@ -72,6 +72,10 @@ input[type=number] {
     color: var(--02-Accent-1, #E44653) !important;
 }
 
+.event-form {
+    
+}
+
 .title {
     text-align: center;
     font-variant-numeric: lining-nums proportional-nums;
@@ -147,6 +151,25 @@ input[type=number] {
 
 .login {
     background: url('@/assets/images/backgrounds/login-registr-bg.png') no-repeat center /cover;
+}
+
+.modal-enter-active,
+.modal-leave-active {
+  transition: all 0.25s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.checkbox {
+    background-color: transparent;
+}
+.checkbox.active {
+    background-color: #86489C;
+    border-color: #86489C;
 }
 
 input[type="file"] {

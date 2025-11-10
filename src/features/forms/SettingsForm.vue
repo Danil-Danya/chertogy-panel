@@ -90,7 +90,7 @@
                     <Button 
                         color="gray" 
                         text="В профиль" 
-                        class="md:max-w-[260px] !text-[18px]" 
+                        class="md:max-w-[50%] !text-[18px]" 
                         @click.prevent.stop="goToProfile"
                     />
                 </div>

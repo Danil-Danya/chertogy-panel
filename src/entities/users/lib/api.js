@@ -43,9 +43,12 @@ const resetPassword = async (payload) => {
     }
 };
 
-const getAllUsers = async () => {
+const getAllUsers = async (params) => {
     try {
-
+        const response = await api.get('/users', {
+            params
+        });
+        return response.data;
     } 
     catch (error) {
         console.log(error);
@@ -90,9 +93,10 @@ const updateProfileByUserId = async (id, data) => {
     }
 };
 
-const deleteUserById = async () => {
+const deleteUserById = async (id) => {
     try {
-
+        const deletedUser = await api.delete(`/users/${id}`);
+        return deletedUser;
     } 
     catch (error) {
         console.log(error);
