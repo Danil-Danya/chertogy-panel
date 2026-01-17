@@ -72,8 +72,8 @@ input[type=number] {
     color: var(--02-Accent-1, #E44653) !important;
 }
 
-.event-form {
-    
+.form {
+    background: url('@/assets/images/backgrounds/events-form.png') no-repeat center /cover;
 }
 
 .title {
@@ -174,4 +174,160 @@ input[type=number] {
 
 input[type="file"] {
     opacity: 0;
+}
+
+.scroll-animate-enter-active,
+.scroll-animate-leave-active {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.scroll-animate-enter-from,
+.scroll-animate-leave-to {
+    transform: translateY(50px);
+    opacity: 0;
+}
+
+.scroll-animate-enter-to,
+.scroll-animate-leave-from {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.v-select {
+    display: block !important;
+    /* padding: 15px !important; */
+    font-size: 20px !important;
+    color: #fff !important;
+    width: 100% !important;
+    /* border: 1px solid #6b6b6b !important;  */
+    border-radius: 5px !important;
+    background-color: #1a1520 !important; /* bg-deep-dark */
+    box-sizing: border-box !important;
+}
+
+.v-select .vs__dropdown-toggle {
+    padding: 15px !important;
+    font-size: 20px !important;
+    color: #fff !important;
+    background-color: #1a1520 !important;
+    border: 1px solid #6b6b6b !important;
+    border-radius: 5px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+.v-select .vs__dropdown-toggle:focus {
+    outline: none !important;
+    border-color: #6f4f9d !important; /* focus:border-purple-mid */
+    box-shadow: none !important;
+}
+
+.v-select .vs__placeholder {
+    color: #999 !important; /* placeholder:text-gray-mid */
+}
+
+.v-select .vs__dropdown-menu {
+    background-color: #1a1520 !important;
+    color: #fff !important;
+    border: 1px solid #6b6b6b !important;
+    border-radius: 5px !important;
+    max-height: 250px !important;
+    overflow-y: auto !important;
+}
+
+.v-select .vs__dropdown-option {
+    padding: 10px 15px !important;   
+}
+
+.vs__selected {
+    background: #6E3284 !important;
+    color: #FFFFFF !important;
+    display: block !important;
+    align-items: center !important;
+}
+
+.vs__deselect {
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
+}
+
+.v-select--error .vs__dropdown-toggle {
+    border-color: #ef4444 !important; 
+}
+
+
+.v-select--success .vs__dropdown-toggle {
+    border-color: #22c55e !important; 
+}
+
+.registration__form  {
+    background: none !important;
+}
+
+
+.loader {
+    width: 28px;
+    height: 28px;
+    border: 5px solid #FFF;
+    border-bottom-color: #86489C;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+} 
+
+
+
+.dp__theme_dark {
+    font-family: 'Alegreya', sans-serif;
+
+    --dp-background-color: var(--color-blackish) !important;
+    --dp-text-color: #fff !important;
+    --dp-hover-color: var(--color-deep-dark) !important;
+    --dp-hover-text-color: #fff !important;
+
+    --dp-primary-color: var(--color-purple-dark) !important;
+    --dp-primary-disabled-color: var(--color-purple-mid) !important;
+    --dp-primary-text-color: #fff !important;
+
+    --dp-secondary-color: var(--color-gray-mid) !important;
+
+    --dp-border-color: var(--color-dark);
+    --dp-border-color-hover: var(--color-purple-light) !important;
+    --dp-border-color-focus: var(--color-purple-light) !important;
+    --dp-menu-border-color: var(--color-dark) !important;
+
+    --dp-disabled-color: var(--color-gray-mid) !important;
+    --dp-disabled-color-text: var(--color-gray-light) !important;
+
+    --dp-icon-color: var(--color-purple-light) !important;
+    --dp-hover-icon-color: var(--color-purple-light) !important;
+
+    --dp-scroll-bar-background: var(--color-blackish) !important;
+    --dp-scroll-bar-color: var(--color-purple-mid) !important;
+
+    --dp-success-color: var(--color-green-mid) !important;
+    --dp-success-color-disabled: #6fa973 !important;
+
+    --dp-danger-color: var(--color-red-main) !important;
+    --dp-marker-color: var(--color-red-accent) !important;
+
+    --dp-tooltip-color: var(--color-dark) !important;
+
+    --dp-highlight-color: rgba(106, 59, 123, 0.25) !important;
+    --dp-range-between-dates-background-color: rgba(106, 59, 123, 0.15) !important;
+    --dp-range-between-dates-text-color: #fff !important;
+    --dp-range-between-border-color: var(--color-purple-light) !important;
+
+    --dp-input-padding: 15px !important;
 }

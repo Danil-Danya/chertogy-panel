@@ -23,13 +23,11 @@ const registrationRules = (form) => ({
 
     socialLink: {
         required: helpers.withMessage("Введите ссылку на страницу ВК или Телеграмм", required),
-        maxLength: helpers.withMessage("Ссылка не может быть длиннее 25 символов", maxLength(25)),
+        maxLength: helpers.withMessage("Ссылка не может быть длиннее 40 символов", maxLength(40)),
         socialFormat: helpers.withMessage(
-            "Введите корректную ссылку (https://vk.com/... или https://t.me/... или @username)",
+            "Введите корректную ссылку (https://vk.com/... или https://t.me/...)",
             (value) =>
-                !value || 
-                /^https?:\/\/(vk\.com|t\.me)\/[A-Za-z0-9_]+$/i.test(value) || 
-                /^@[A-Za-z0-9_]+$/i.test(value)
+                !value || /^https?:\/\/(vk\.com|t\.me)\/[A-Za-z0-9_]+$/i.test(value)
         ),
     },
 
@@ -90,7 +88,7 @@ const profileRules = (form) => ({
     },
     socialLink: {
         socialFormat: helpers.withMessage(
-            "Введите корректную ссылку (https://vk.com/... или https://t.me/... или @username)",
+            "Введите корректную ссылку (https://vk.com/... или https://t.me/... или username)",
             (value) =>
                 !value || 
                 /^https?:\/\/(vk\.com|t\.me)\/[A-Za-z0-9_]+$/i.test(value) || 

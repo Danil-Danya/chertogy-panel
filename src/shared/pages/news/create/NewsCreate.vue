@@ -1,7 +1,10 @@
 <template>
     <section class="news">
         <div class="news__content">
-            <h1 class="title">Создать новость</h1>
+            <div class="news__top flex justify-center items-center gap-[30px] md:flex-nowrap flex-wrap !mb-[10px]">
+                <h1 class="title">Создать новость</h1>
+                <Button class="md:max-w-[100px] max-w-full" color="purple" text="Назад" @click="goToBack" />
+            </div>
             <div class="news__form-content flex flex-col items-center justify-center">
                 <NewsForm 
                     :newsData="newsData"
@@ -33,6 +36,10 @@
 
     const formPayload = ref({});
 
+    const goToBack = () => {
+        router.go(-1)
+    }
+
     const newsData = ref({
         title: "",
         description: "",
@@ -62,7 +69,9 @@
 
             const newNews = await createNews(formData);
             if (newNews) {
-                router.replace({ path: '/news' });
+                router.replace({ 
+                    path: '/news' 
+                });
             }
         }
         catch (error) {

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { getTagById, getTags, getTagsCategories, getTagsCategoryById } from "../lib/api";
+import { getTagById, getTags, getTagsCategories, getTagsCategoryById, getTagsCategoryByName } from "../lib/api";
 
 export const useTagsStore = defineStore('tags', {
     state: () => ({
@@ -14,8 +14,13 @@ export const useTagsStore = defineStore('tags', {
             this.tagsCategories = await getTagsCategories(params);
         },
 
-        async fetchCategory (id) {
-            this.tagsCategory = await getTagsCategoryById(id);
+        async fetchCategory (id, name) {
+            if (id) {
+                this.tagsCategory = await getTagsCategoryById(id);
+            }
+            else if (name) {
+                this.tagsCategory = await getTagsCategoryByName(name);
+            }
         },
 
         async fetchTags (params) {

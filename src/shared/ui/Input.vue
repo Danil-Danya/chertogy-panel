@@ -24,15 +24,29 @@
             <Component :is="icon" v-if="icon" />
         </div>
 
-        <p class="message" v-if="message"
-            :class="{
-                'text-red-500': message.type === 'error',
-                'text-green-500': message.type === 'success',
-                'text-gray-mid': message.type === 'warning',
-            }"
-        >
-        {{ message.text }}
-        </p>
+        <div class="message__container justify-between flex mt-2">
+            <p
+                v-if="message"
+                class="message"
+                :class="{
+                    'text-red-500': message.type === 'error',
+                    'text-green-500': message.type === 'success',
+                    'text-gray-mid': message.type === 'warning',
+                }"
+            >
+                {{ message.text }}
+            </p>
+            <p
+                class="counter"
+                :class="{
+                    'text-red-500': message?.type === 'error',
+                    'text-green-500': message?.type === 'success',
+                    'text-gray-mid': message?.type === 'warning',
+                }"
+            >
+                {{ counter }}
+            </p>
+        </div>
     </div>
 </template>
 
@@ -45,6 +59,11 @@
 
     const props = defineProps({
         label: {
+            type: String,
+            required: true
+        },
+
+        counter: {
             type: String,
             required: true
         },

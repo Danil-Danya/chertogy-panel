@@ -1,5 +1,5 @@
 <template>
-    <div class="masters__card !p-[20px] md:w-[calc(50%-20px)] w-full rounded-[8px] border-l-[10px] border-purple-dark !mb-[20px]"
+    <div class="masters__card !p-[20px] w-full rounded-[8px] border-l-[10px] border-purple-dark !mb-[20px]"
         :style="{
             background: 'linear-gradient(114deg, rgba(54,38,38,0.3) -3.5%, rgba(34,27,36,0.3) 47.08%, rgba(54,38,38,0.3) 97.65%)'
         }"

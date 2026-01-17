@@ -8,7 +8,7 @@
         <div class="modal__window h-full ">
             <div class="container h-full">
                 <div class="modal__content h-full flex justify-center items-center grow-1">
-                    <div class="modal__delete w-[50%] bg-dark rounded-[8px] !p-[30px]">
+                    <div class="modal__delete w-[90%] md:w-[50%] bg-dark rounded-[8px] !p-[30px]">
                         <h3 class="modal__delete-title title !text-left !text-[32px]">{{ title }}</h3>
                         <p class="modal__delete-text text !m-[20px_0]">{{ text }}</p>
                         <div class="modal__delete-buttons flex gap-[20px]">

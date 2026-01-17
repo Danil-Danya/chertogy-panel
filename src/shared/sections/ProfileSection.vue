@@ -6,12 +6,12 @@
             <div class="profile__section-avatar w-full h-auto md:!w-[256px] md:h-[256px]">
                 <img v-if="profile.profile.avatarPath"
                     :src="`${imageUrl}/${profile.profile.avatarPath}`" 
-                    class="profile__section-avatar-img block rounded-[10px] w-full h-auto md:!w-[256px] md:h-[256px]"
+                    class="profile__section-avatar-img block rounded-[10px] w-full h-[340px] md:!w-[256px] md:h-[256px]"
                     alt="Аватарка" 
                 >
                 <img v-else
                     src="https://api.xn----dtbbbhdau6cfpgt1e.xn--p1ai/images/default_avatar.png" 
-                    class="profile__section-avatar-img block rounded-[10px] w-full h-auto md:!w-[256px] md:h-[256px]"
+                    class="profile__section-avatar-img block rounded-[10px] w-full h-[340px] md:!w-[256px] md:h-[256px]"
                     alt="Аватарка" 
                 >
             </div>
@@ -99,7 +99,7 @@
         },
         {
             title: 'Участник',
-            value: '0 событий',
+            value: `${profile.subscribedEvents.length} событий`,
             color: 'linear-gradient(257deg, rgba(51, 87, 129, 0.20) -4.79%, rgba(58, 58, 58, 0.20) 86.4%)'
         },
     ])

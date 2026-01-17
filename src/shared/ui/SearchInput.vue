@@ -1,6 +1,6 @@
 <template>
     <div class="input__container w-full">
-        <div class="input__wrapper relative">
+        <div class="input__wrapper relative w-full">
             <input 
                 :id="id"
                 ref="inputRef"

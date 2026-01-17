@@ -72,7 +72,8 @@ const router = createRouter({
             name: 'my-events', 
             component: () => import('@/pages/MyEvents.vue'),
             meta: {
-                layout: 'profile'
+                layout: 'profile',
+                title: 'События'
             }
         },
         {
@@ -209,22 +210,40 @@ const router = createRouter({
                 roles: ['ADMIN']
             }
         },
-        // {
-        //     path: '',
-        //     name: '', 
-        //     component: () => import('@/pages/'),
-        //     meta: {
-        //         layout: ''
-        //     }
-        // },
-        // {
-        //     path: '',
-        //     name: '', 
-        //     component: () => import('@/pages/'),
-        //     meta: {
-        //         layout: ''
-        //     }
-        // },
+        {
+            path: '/master-events',
+            name: 'master-events', 
+            component: () => import('@/pages/EventsMaster.vue'),
+            meta: {
+                layout: 'profile',
+                title: 'События (мастера)',
+                auth: true,
+                roles: ['ADMIN', 'MASTER']
+            }
+        },
+        {
+            path: '/events/update/:id',
+            name: 'event-update', 
+            component: () => import('@/pages/EventsUpdate.vue'),
+            meta: {
+                layout: 'form',
+                isUpdate: true,
+                auth: 'true',
+                roles: ['ADMIN', 'MASTER']
+            }
+        },
+        {
+            path: '/events/approval',
+            name: 'approval', 
+            component: () => import('@/pages/EventsApproval.vue'),
+            meta: {
+                layout: 'profile',
+                isApproval: true,
+                title: 'Утверждение событий',
+                auth: 'true',
+                roles: ['ADMIN',]
+            }
+        },
         // {
         //     path: '',
         //     name: '', 

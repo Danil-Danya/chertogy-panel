@@ -1,5 +1,5 @@
 <template>
-    <div class="notifications__card !p-[30px] 
+    <div class="notifications__card !p-[15px] 
                 w-full rounded-[8px] border-l-[10px] 
                 border-gray-mid !mb-[20px]
         "
@@ -8,21 +8,29 @@
         }"
         :class="{
             'border-red-bright': color === 'red',
-            'border-green-mid': color === 'green',
-            '!border-brown-mid': color === 'yellow'
+            'border-green-mid': color === 'success',
+            '!border-brown-mid': color === 'info'
         }"
     >
         <div class="notifications__card-content flex gap-[5px] flex-wrap" v-if="color">
-            <p class="text !text-blue-mid !font-[700]">{{ subject }}</p>
-            <p class="text !font-[700]">{{ action }}</p>
-            <p class="text !text-red-bright !font-[700]">{{ target }}</p>
+            <p class="text !text-blue-mid !font-[700]" v-html="subject"></p>
+            <p class="text !font-[700]"  v-html="action"
+                :class="{
+                    '!text-red-bright': color === 'red',
+                    '!text-green-mid': color === 'success',
+                    '!text-brown-mid': color === 'info'
+                }"
+            >
+            </p>
+            <p class="text !text-blue-mid !font-[700]" v-html="target" ></p>
         </div>
 
         <div class="notifications__card-content flex gap-[5px] flex-wrap" v-else>
-            <p class="text !text-gray-mid !font-[700]">{{ subject }}</p>
-            <p class="text !text-gray-mid !font-[700]">{{ action }}</p>
-            <p class="text !text-gray-mid !font-[700]">{{ target }}</p>
+            <p class="text !text-gray-mid !font-[700]" v-html="subject"></p>
+            <p class="text !text-gray-mid !font-[700]" v-html="action"></p>
+            <p class="text !text-gray-mid !font-[700]" v-html="target"></p>
         </div>
+
     </div>
 </template>
 

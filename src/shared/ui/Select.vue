@@ -5,71 +5,75 @@
             class="text-label text-white xl:text-[22px] block !mb-[10px]" 
             v-if="label"
         >
-            {{ label }}
+        {{ label }}
         </label>
 
-        <div class="select__wrapper relative">
-            <select
-                :id="id"
-                :value="modelValue"
-                @change="onChange"
-                class="block !p-[15px] text-[20px]
-                    text-white w-full border border-gray-mid
-                    rounded bg-deep-dark px-3 py-2 focus:outline-none 
-                    focus:border-purple-mid placeholder:text-gray-mid
-                "
-            >
-                <option 
-                    v-for="(option, index) in options" 
-                    :key="index" 
-                    :value="option.value"
-                >
-                    {{ option.label }}
-                </option>
-            </select>
+        <v-select
+            :id="id"
+            v-model="internalValue"
+            :options="options"
+            :multiple="multiple"
+            label="label"
+            :searchable="true"
+            :clearable="true"
+            :reduce="option => option.value"
+            :close-on-select="!multiple"
+            placeholder="Выберите вариант"
+            class="v-select--dark"
+            @search:blur="onBlur"
+            @blur="onBlur"
 
-            <Component :is="icon" v-if="icon" class="absolute right-3 top-1/2 -translate-y-1/2" />
-        </div>
+            :class="{
+                'v-select--error': message?.type === 'error',
+                'v-select--success': message?.type === 'success'
+            }"
+        />
+
+        <p
+            v-if="message"
+            class="message mt-1"
+            :class="{
+                'text-red-500': message.type === 'error',
+                'text-green-500': message.type === 'success',
+                'text-gray-mid': message.type === 'warning',
+            }"
+        >
+            {{ message.text }}
+        </p>
     </div>
 </template>
 
 <script setup>
 
-    import { defineProps, defineEmits } from 'vue';
+    import { ref, watch } from 'vue';
+    import vSelect from 'vue-select';
+    import 'vue-select/dist/vue-select.css';
 
     const props = defineProps({
-        label: {
-            type: String,
-            required: true
-        },
-
-        id: {
-            type: String,
-            required: true
-        },
-
-        icon: {
-            type: Object,
-            default: null
-        },
-
-        modelValue: {
-            type: [String, Number],
-            default: ''
-        },
-        
+        label: { type: String, required: true },
+        id: { type: String, required: true },
+        modelValue: { type: [String, Number, Array], default: '' },
+        multiple: { type: Boolean, default: false },
         options: {
             type: Array,
             required: true,
-            validator: (arr) => arr.every(opt => 'label' in opt && 'value' in opt)
+            validator: arr => arr.every(opt => 'label' in opt && 'value' in opt)
+        },
+        message: {
+            type: Object,
+            validator: (val) =>
+                ['error', 'success', 'warning'].includes(val?.type)
         }
     });
 
-    const emit = defineEmits(['update:modelValue']);
 
-    const onChange = (e) => {
-        emit('update:modelValue', e.target.value);
-    };
-    
+    const emit = defineEmits(['update:modelValue', 'blur']);
+
+    const internalValue = ref(props.modelValue);
+
+    const onBlur = (e) => emit('blur', e);
+
+    watch(() => props.modelValue, val => internalValue.value = val);
+    watch(internalValue, val => emit('update:modelValue', val));
+
 </script>
-

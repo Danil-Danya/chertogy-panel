@@ -3,7 +3,7 @@
         <div class="settings__form-container">
             <div class="settings__form-top flex gap-[15px] flex-wrap md:flex-nowrap">
                 <div class="settings__form-file md:max-w-[252px] w-full">
-                    <FileUpload @update:file="onFileSelected" />
+                    <FileUpload @update:file="onFileSelected" :file="uploadedFile" />
                 </div>
                 <div class="">
                     <h2 class="settings__title text-purple-light text-[32px]">Личная информация</h2>
@@ -85,6 +85,7 @@
                         color="green" 
                         text="Применить" 
                         @click.prevent.stop="submitAllData()" 
+                        :loading="loading"
                         class="!text-[18px]" 
                     />
                     <Button 
@@ -95,13 +96,14 @@
                     />
                 </div>
             </div>
+            <p class="message text-red-500">{{ serverMessage }}</p>
         </div>
     </form>
 </template>
 
 <script setup>
 
-    import { reactive, computed, ref } from 'vue';
+    import { reactive, computed, ref, onMounted } from 'vue';
     import { useRouter } from 'vue-router';
 
     import { useUserStore } from '@/entities/users/model/store';
@@ -122,6 +124,9 @@
     const isMobile = useIsMobile();
 
     const user = userStore.profile;
+
+    const serverMessage = ref('');
+    const loading = ref(false);
 
     const areaSymbols = computed(() => payloadProfile.biography?.length || 0);
     const areaSymbolsMax = computed(() => 350);
@@ -175,28 +180,42 @@
         vUser$.value.$touch();
         vProfile$.value.$touch();
 
+        loading.value = true;
+
         if (vUser$.$invalid || vProfile$.$invalid) {
             return;
         }
 
-        payloadUser.password = payloadUser.password ? payloadUser.password : undefined;
-        const updatedUser = await updateUserById(user.id, payloadUser);
-        if (!updatedUser) {
-            return;
+        try {
+            payloadUser.password = payloadUser.password ? payloadUser.password : undefined;
+            const updatedUser = await updateUserById(user.id, payloadUser);
+            if (!updatedUser) {
+                return;
+            }
+
+            const profileData = getFormDataToProfile();
+            const updatedProfile = await updateProfileByUserId(user.profile.id, profileData);
+    
+            if (!updatedProfile) {
+                return;
+            }
+    
+            router.replace('/profile');
         }
+        catch (error) {
+            console.log(error);
+            serverMessage.value = error.response.data.message;
 
-        const profileData = getFormDataToProfile();
-        const updatedProfile = await updateProfileByUserId(user.profile.id, profileData);
-
-        if (!updatedProfile) {
-            return;
+            loading.value = false;
         }
-
-        router.replace('/profile');
     }
 
     const goToProfile = () => {
         router.replace('/profile');
     }
+
+    onMounted(() => {
+        uploadedFile.value = user.profile.avatarPath;
+    })
 
 </script>

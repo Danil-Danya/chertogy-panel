@@ -69,7 +69,7 @@
         if (!route.query[props.param]) {
             router.replace({
                 query: {
-                    [props.param]: props.rightButton.query
+                    [props.param]: props.leftButton.query
                 }
             })
         }

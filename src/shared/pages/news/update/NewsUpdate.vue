@@ -1,7 +1,10 @@
 <template>
     <section class="news">
         <div class="news__content" v-if="currentNews">
-            <h1 class="title">Редактировать новость</h1>
+            <div class="news__top flex justify-center items-center gap-[30px] md:flex-nowrap flex-wrap !mb-[10px]">
+                <h1 class="title">Редактировать новость</h1>
+                <Button class="md:max-w-[100px] max-w-full" color="purple" text="Назад" @click="goToBack" />
+            </div>
             <div class="news__form-content flex flex-col items-center justify-center">
                 <NewsForm 
                     :news-data="currentNews" 
@@ -39,6 +42,10 @@
     import DeleteModal from '@/features/modals/DeleteModal.vue';
 
     const isActiveDeleteModal = ref(false);
+
+    const goToBack = () => {
+        router.go(-1)
+    }
 
     const newsStore = useNewsStore();
     const router = useRouter();
@@ -93,7 +100,7 @@
 
             const newNews = await updateNews(newsId, formData);
             if (newNews) {
-                location.reload();
+                router.replace('/news');
             }
         }
         catch (error) {

@@ -3,15 +3,15 @@
                 bg-[radial-gradient(103.75%_60.01%_at_51.36%_54.36%,rgba(44,38,47,0.30)_0%,rgba(21,21,22,0.30)_100%)]"
     >
         <div class="profile__section-container flex flex-wrap md:flex-nowrap gap-[30px]">
-            <div class="profile__section-avatar w-full h-auto md:!w-[340px] md:h-[256px]">
+            <div class="profile__section-avatar w-full h-[390px] md:!w-[340px] md:h-[256px]">
                 <img v-if="user.profile.avatarPath"
                     :src="`${imageUrl}/${user.profile.avatarPath}`" 
-                    class="profile__section-avatar-img block rounded-[10px] w-full h-auto md:!w-[340px] md:h-[256px]"
+                    class="profile__section-avatar-img block rounded-[10px] w-full h-[340px] md:!w-[340px] md:h-[256px]"
                     alt="Аватарка" 
                 >
                 <img v-else
                     src="https://api.xn----dtbbbhdau6cfpgt1e.xn--p1ai/images/default_avatar.png" 
-                    class="profile__section-avatar-img block rounded-[10px] w-full h-auto md:!w-[256px] md:h-[256px]"
+                    class="profile__section-avatar-img block rounded-[10px] w-full h-[340px] md:!w-[256px] md:h-[256px]"
                     alt="Аватарка" 
                 >
             </div>

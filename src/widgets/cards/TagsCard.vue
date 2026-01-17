@@ -12,18 +12,10 @@
                         <RouterLink :to="`/tags/${category?.id}/update/${tag.id}`">
                             <EditIcon />
                         </RouterLink>
-                        <span class="tags__icon cursor-pointer" @click="toggleDeleteModal">
+                        <span class="tags__icon cursor-pointer" @click="toggleDeleteModal(tag.shortName, tag.id)">
                             <DeleteIcon />
                         </span>
                     </div>
-                    <Transition name="modal">
-                        <DeleteModal v-if="isActiveDeleteModal && index === 0"
-                            :title='`Удалить тег: "${tag.shortName}?"`'
-                            text="Вы уверены, что хотите удалить этот тег? Это действие необратимо."
-                            @closeModal="toggleDeleteModal"
-                            @deleteModal="handleDeleteTag(tag.id)"
-                        />
-                    </Transition>
                 </div>
             </div>
             <div class="tags__create">
@@ -35,6 +27,14 @@
                 </RouterLink>
             </div>
         </div>
+        <Transition name="modal">
+            <DeleteModal v-if="isActiveDeleteModal"
+                :title='`Удалить тег: "${shortName}?"`'
+                text="Вы уверены, что хотите удалить этот тег? Это действие необратимо."
+                @closeModal="toggleDeleteModal"
+                @deleteModal="handleDeleteTag(tagId)"
+            />
+        </Transition>
     </div>
 </template>
 
@@ -49,9 +49,15 @@
 
     import DeleteModal from '@/features/modals/DeleteModal.vue';
 
+    const shortName = ref('');
+    const tagId = ref(null);
+
     const isActiveDeleteModal = ref(false);
 
-    const toggleDeleteModal = () => {
+    const toggleDeleteModal = (shortNameIndex, tagIdIndex) => {
+        shortName.value = shortNameIndex;
+        tagId.value = tagIdIndex;
+
         isActiveDeleteModal.value = !isActiveDeleteModal.value;
     };
 

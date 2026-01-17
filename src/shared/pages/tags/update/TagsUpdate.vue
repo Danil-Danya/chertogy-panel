@@ -2,7 +2,10 @@
     <section class="tags__create">
         <div class="container">
             <div class="tags__create-content" v-if="tagsStore.tagsCategory && tagsStore.tag">
-                <h2 class="title !mb-[30px]">Обновление тега для категории: {{ tagsStore.tagsCategory.name.toLowerCase() }}</h2>
+                <div class="tags__top flex justify-center items-center gap-[30px] md:flex-nowrap flex-wrap !mb-[10px]">
+                    <h2 class="title !mb-[30px]">Обновление тега для категории: {{ tagsStore.tagsCategory.name.toLowerCase() }}</h2>
+                    <Button class="md:max-w-[100px] max-w-full" color="purple" text="Назад" @click="goToBack" />
+                </div>
                 <TagsForm 
                     @update="onFormUpdate"
                     :tagsForm="tagsStore.tag"
@@ -36,6 +39,10 @@
     const onFormUpdate = (data) => {
         tagsPayload.value = data;
     };
+
+    const goToBack = () => {
+        router.go(-1)
+    }
 
     const updateTags = async () => {
         try {

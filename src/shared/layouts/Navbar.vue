@@ -31,13 +31,13 @@
                 </div>
                 <div class="navbar__right">
                     <div class="navbar__login" v-if="profile">
-                        <a href="/profile" class="navbar__button-link">
+                        <a href="/panel/profile" class="navbar__button-link">
                             <img :src="`${imageUrl}/${profile.profile.avatarPath}`" alt="Аватарка" class="navbar__button-img">
                         </a>
                         <a href="/login" class="navbar__button-link" @click.prevent.stop="logout">
-                            <span class="navbar__button-icon">
+                            <!-- <span class="navbar__button-icon">
                                 <UserIcon />
-                            </span>
+                            </span> -->
                             Выйти
                         </a>
                     </div>

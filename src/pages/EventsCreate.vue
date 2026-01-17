@@ -1,5 +1,7 @@
 <template>
-    <EventsCreate />
+    <div class="events">
+        <EventsCreate />
+    </div>
 </template>
 
 <script setup>

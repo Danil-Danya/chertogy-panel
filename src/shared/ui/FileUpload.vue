@@ -81,6 +81,10 @@
 
     const onFileChange = async (event) => {
         const fileUpload = event.target.files[0];
+
+        fileError.value = null;
+
+        if (!fileUpload) return;
         
         await validateFileInput(fileUpload);
 
@@ -105,10 +109,45 @@
         }
     }
 
-    // watch(file, (newFile, oldFile) => {
-    //     if (oldFile && previewUrl.value) {
-    //         URL.revokeObjectURL(previewUrl.value);
-    //     }
-    // });
+    const props = defineProps({
+        submitAttempted: Boolean,
+        file: [File, String, null],
+    });
+
+    watch(
+        () => props.submitAttempted,
+        (attempted) => {
+            if (attempted && !props.file) {
+                fileError.value = 'Пожалуйста, загрузите изображение';
+            }
+        }
+    );
+
+    watch(
+        () => props.file,
+        (value) => {
+            if (!value) {
+                previewUrl.value = null;
+                return;
+            }
+
+            if (value instanceof File) {
+                previewUrl.value = URL.createObjectURL(value);
+                return;
+            }
+
+            if (typeof value === 'string') {
+                if (value.startsWith('http')) {
+                    previewUrl.value = value;
+                } 
+                else {
+                    previewUrl.value = `${import.meta.env.VITE_APP_IMAGE_URL}/${value}`;
+                }
+            }
+        },
+        { immediate: true }
+    );
+
+
 
 </script>

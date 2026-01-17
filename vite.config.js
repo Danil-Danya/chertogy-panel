@@ -18,6 +18,8 @@ export default defineConfig({
         },
     },
 
+    base: '/panel/',
+
     css: {
         preprocessorOptions: {
             scss: {

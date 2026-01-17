@@ -20,6 +20,7 @@
         <span class="button__icon block w-[24px] h-[24px] flex justify-center items-center" v-if="icon">
             <Component :is="icon" />
         </span>
+        <span v-if="loading" class="loader"></span>
         <p class="button__text">{{ text }}</p>
     </Component>
 </template>
@@ -52,7 +53,12 @@
         link: {
             type: String,
             default: '#'
-        }
+        },
+
+        loading: {
+            type: Boolean,
+            default: false
+        },
     })
 
 </script>

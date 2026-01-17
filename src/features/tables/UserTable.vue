@@ -1,5 +1,5 @@
 <template>
-    <div class="users-table rounded-[10px] !mt-[30px]">
+    <div class="users-table rounded-[10px] !mt-[30px] md:overflow-auto overflow-x-scroll !pb-[180px]">
         <table class="w-full rounded-[10px] border-separate border-spacing-y-[10px]">
             <thead class="h-[60px] rounded-[10px]"
                 style="background: linear-gradient(257deg, rgba(90, 51, 98, 0.20) -4.79%, rgba(31, 24, 33, 0.20) 86.4%);"
@@ -14,9 +14,7 @@
                 </tr>
             </thead>
 
-            <div class="!mt-[30px]"></div>
-
-            <tbody>
+            <tbody v-if="users.length">
                 <tr v-for="(user, index) in users" :key="user.id"
                     :class="{
                         'rounded-t-[10px]': index === 0
@@ -32,13 +30,13 @@
 
                     <td class="user-login !p-[10px]">
                         <div class="flex gap-[10px] items-center">
-                            <img :src="`${IMAGE_URL}/${user.profile.avatarPath}`" alt="avatar" class="avatar w-[50px] h-[50px] rounded-full" />
-                            <span class="text">{{ user.login }}</span>
+                            <img :src="`${IMAGE_URL}/${user.profile?.avatarPath}`" alt="avatar" class="avatar w-[50px] h-[50px] rounded-full" />
+                            <a :href="`/panel/user/${user?.id}`" class="text">{{ user?.login }}</a>
                         </div>
                     </td>
 
-                    <td class="text !p-[10px] !text-purple-light">{{ user.profile.phone }}</td>
-                    <td class="text !p-[10px] !text-gray-mid">{{ user.email }}</td>
+                    <td class="text !p-[10px] !text-purple-light">{{ user?.profile?.phone }}</td>
+                    <td class="text !p-[10px] !text-gray-mid">{{ user?.email }}</td>
 
                     <td class="!p-[10px]">
                         <span :class="[
@@ -52,7 +50,7 @@
                         ]"
                         class="text !p-[10px_5px] flex justify-center items-center rounded-[5px]"
                         >
-                            {{ rolesHelper[user.role.toLowerCase()].ru }}
+                            {{ rolesHelper[user?.role.toLowerCase()].ru }}
                         </span>
                     </td>
 
@@ -77,7 +75,7 @@
 
     import rolesHelper from "@/utils/rolesHelper";
 
-    const IMAGE_URL = import.meta.env.VITE_APP_IMAGE_URL || '';
+    const IMAGE_URL = import.meta.env.VITE_APP_IMAGE_URL || 'https://api.чертоги-героев.рф/images';
 
     const dropdown = ref({
         isActive: false,
@@ -101,6 +99,9 @@
             required: true
         }
     });
+
+    console.log(props.users);
+    
 
     const limit = ref(10);
 

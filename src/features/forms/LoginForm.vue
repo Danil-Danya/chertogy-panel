@@ -6,12 +6,12 @@
                 <PasswordInput v-model="loginPayload.password" label="Пароль" type="password" :message="errorPassword" />
             </div>
             <div class="login__button-container w-full flex flex-col gap-[20px]">
-                <Button color="purple" text="Войти" class="w-full" @click.prevent.stop="submitLogin" />
-                <Button color="blue" text="Войти с помощью ВКонтакте" :icon="LoginIcon" class="w-full" @click.prevent.stop="loginWithVK" />
-                <Button color="purple" text="Зарегистрироваться" type="link" link="/registration" class="w-full" />
+                <Button :loading="loading" color="green" text="Войти" class="w-full" @click.prevent.stop="submitLogin" />
+                <!-- <Button color="blue" text="Войти с помощью ВКонтакте" :icon="LoginIcon" class="w-full" @click.prevent.stop="loginWithVK" /> -->
+                <Button color="purple" text="Зарегистрироваться" type="link" link="https://xn----dtbbbhdau6cfpgt1e.xn--p1ai/panel/registration" class="w-full" />
             </div>
             <div class="login__link-container flex justify-center !mt-[30px]">
-                <a href="/reset/password" class="login__link text-purple-mid text-[22px]">Забыли пароль?</a>
+                <a href="https://xn----dtbbbhdau6cfpgt1e.xn--p1ai/panel/reset/password" class="login__link text-purple-mid text-[22px]">Забыли пароль?</a>
             </div>
         </div>
     </form>
@@ -47,9 +47,13 @@
         window.location.href = `https://id.vk.com/authorize?client_id=${appId}&redirect_uri=${redirectUri}&response_type=code&scope=email`;
     };
 
+    const loading = ref(false);
+
 
     const submitLogin = async () => {
         try {
+            loading.value = true;
+
             const loginData = await login(loginPayload);
     
             if (loginData.accessToken && loginData.refreshToken) {
@@ -62,8 +66,33 @@
             }
         }
         catch (error) {
-            errorEmail.value = { type: 'error', text: error.response.data.errors };
-            errorPassword.value = { type: 'error', text: error.response.data.errors };
+            loading.value = false;
+
+            handleFieldErrors(
+                error?.response?.data?.errors,
+                {
+                    email: (v) => errorEmail.value = v,
+                    password: (v) => errorPassword.value = v,
+                }
+            );
+        }
+    }
+
+
+    const handleFieldErrors = (errors, fieldSetters) => {
+        if (!Array.isArray(errors)) return;
+
+        Object.values(fieldSetters).forEach(setter => setter(null));
+
+        for (const err of errors) {
+            const setError = fieldSetters[err.path];
+
+            if (setError) {
+                setError({
+                    type: 'error',
+                    text: err.msg
+                });
+            }
         }
     }
 

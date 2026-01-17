@@ -10,7 +10,7 @@
                 "
         >
             <UserFilter />
-            <UserTable v-if="userStore.users?.rows"
+            <UserTable v-if="userStore.users?.rows.length"
                 :users="userStore.users.rows" 
             />
         </div>
@@ -19,7 +19,7 @@
 
 <script setup>
 
-    import { watch } from 'vue';
+    import { onMounted, watch } from 'vue';
     import { useUserStore } from '@/entities/users/model/store';
 
     import UserTable from '@/features/tables/UserTable.vue';
@@ -31,5 +31,9 @@
         () => userStore.users,
         { deep: true }
     )
+
+    // onMounted(async () => {
+    //     await userStore.fetchUsers();
+    // })  
 
 </script>

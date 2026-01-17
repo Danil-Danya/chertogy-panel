@@ -17,7 +17,7 @@ const newsRules = (form) => ({
         ),
     },
 
-    fullDescription: {
+    description: {
         required: helpers.withMessage("Введите полное описание новости", required),
         maxLength: helpers.withMessage(
             "Полное описание не может превышать 1500 символов",

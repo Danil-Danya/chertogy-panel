@@ -18,13 +18,13 @@
                 </div>
                 <div class="navbar__right">
                     <div class="navbar__button-container">
-                        <a href="/login" class="navbar__button" v-if="!profile">
+                        <a href="/panel/login" class="navbar__button" v-if="!profile">
                             <span class="navbar__button-icon">
                                 <UserIcon />
                             </span>
                             <p class="navbar__buttons-text">Войти</p>
                         </a>
-                        <a href="/profile" class="navbar__button-link" v-else>
+                        <a href="/panel/profile" class="navbar__button-link" v-else>
                             <img :src="`${imageUrl}/${profile.profile.avatarPath}`" alt="Аватарка" class="navbar__button-img">
                         </a>
                         <TransitionGroup name="nav-button">

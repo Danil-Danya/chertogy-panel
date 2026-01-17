@@ -1,8 +1,8 @@
 <template>
     <div class="users__filter">
-        <div class="users__filter-content flex justify-between">
-            <div class="users__input-container">
-                <SearchInput class="!w-[400px]" placeholder="Введите никнейм" v-model="search" @input="debouncedUpdateFilter" />
+        <div class="users__filter-content flex justify-between flex-wrap md:flex-nowrap">
+            <div class="users__input-container md:!w-[400px] w-full">
+                <SearchInput class="md:!w-[400px] w-full" placeholder="Введите никнейм" v-model="search" @input="debouncedUpdateFilter" />
             </div>
             <div class="users__checkbox-container flex flex-col justify-between">
                 <h3 class="user__filter-title text-[14px] text-purple-dark">Фильтровать по</h3>
@@ -16,9 +16,9 @@
                     />
                 </div>
             </div>
-            <div class="users__crate flex items-end">
+            <!-- <div class="users__crate flex items-end">
                 <Button text="+" color="green" class="!w-[50px] h-[50px]" />
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -47,7 +47,7 @@
 
     const filter = {
         page: 1,
-        limit: 10,
+        limit: 100,
     }
 
     onMounted(async () => {
@@ -56,8 +56,8 @@
 
     const updateFilter = async () => {
         const selectedRoles = roleFilter.value
-        .filter(r => r.checked)
-        .map(r => r.value);
+            .filter(r => r.checked)
+            .map(r => r.value);
 
         filter.roles = selectedRoles;
 

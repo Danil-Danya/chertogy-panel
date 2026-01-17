@@ -24,6 +24,17 @@ const getTagsCategoryById = async (id) => {
     }
 }
 
+const getTagsCategoryByName = async (name) => {
+    try {
+        const response = await api.get(`/tags-categories/name/${name}`);
+        return response.data;
+    }
+    catch (error) {
+        console.log(error);
+        return error;
+    }
+}
+
 const getTags = async (params) => {
     try {
         const response = await api.get(`/tags`, {
@@ -82,6 +93,7 @@ const deleteTag = async (id) => {
 }
 
 export {
+    getTagsCategoryByName,
     getTagsCategoryById,
     getTagsCategories,
     getTagById,
