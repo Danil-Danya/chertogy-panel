@@ -9,8 +9,8 @@ export const useNewsStore = defineStore('news', {
     }),
 
     actions: {
-        async fetchNews () {
-            this.news = await getNews();
+        async fetchNews (params) {
+            this.news = await getNews(params);
         },
 
         async fetchCurrentNews (id) {

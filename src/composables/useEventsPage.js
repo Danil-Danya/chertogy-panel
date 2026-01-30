@@ -1,4 +1,4 @@
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, watch } from 'vue';
 import { useEventsStore } from '@/entities/event/models/store';
 
 
@@ -9,7 +9,7 @@ const EVENTS_MODE = {
 };
 
 
-export function useEventsPage(mode) {
+export function useEventsPage(mode, params) {
     const eventsStore = useEventsStore();
 
     const events = computed(() => {
@@ -34,6 +34,17 @@ export function useEventsPage(mode) {
         return [];
     });
 
+    const pagination = computed(() => {
+        return {
+            page: eventsStore.events.page,
+            limit: eventsStore.events.limit,
+            offset: eventsStore.events.offset,
+            totalItems: eventsStore.events.totalItems,
+            totalPages: eventsStore.events.totalPages
+        };
+    });
+
+
     const fetchEvents = async (params) => {
         try {
             if (mode === EVENTS_MODE.MASTER) {
@@ -53,12 +64,21 @@ export function useEventsPage(mode) {
         }
     };
 
-    onMounted(() => {
-        fetchEvents();
+    onMounted(async () => {
+        await fetchEvents(params);
     });
+
+    watch(
+        () => params.page,
+        async () => {
+            await fetchEvents(params);
+        }
+    );
+
 
     return {
         refetch: fetchEvents,
+        pagination,
         events
     };
 }

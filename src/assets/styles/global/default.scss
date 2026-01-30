@@ -135,6 +135,10 @@ input[type=number] {
     font-style: normal;
     font-weight: 400;
     line-height: 120%; /* 24px */
+
+    &-arial {
+        font-family: Alegreya, "Alegreya Fallback: Arial";
+    }
 }
 
 .profile {
@@ -285,6 +289,26 @@ input[type="file"] {
         transform: rotate(360deg);
     }
 } 
+
+.dropdown-enter-active,
+.dropdown-leave-active {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: top;
+}
+
+.dropdown-enter-from,
+.dropdown-leave-to {
+    opacity: 0;
+    transform: translateY(-10px);
+    max-height: 0;
+}
+
+.dropdown-enter-to,
+.dropdown-leave-from {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 500px; /* достаточно для дропдауна */
+}
 
 
 

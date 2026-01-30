@@ -51,8 +51,8 @@
     const EMPTY_STATES = {
         'my-events': {
             text: 'Вы ещё не подписались ни на одно событие',
-            link: '/events',
-            linkText: 'Перейти к просмотру событий',
+            // link: '/events',
+            // linkText: 'Перейти к просмотру событий',
         },
 
         'master-events': {

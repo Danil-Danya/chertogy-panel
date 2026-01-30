@@ -1,5 +1,5 @@
 <template>
-    <section class="profile min-h-[100vh] !pt-[150px] !pb-[60px]">
+    <section class="profile min-h-[100vh] md:!pt-[150px] !pt-[100px] !pb-[60px]">
         <div class="container">
             <div class="profile__container flex justify-between">
                 <div class="flex flex-wrap items-center gap-[30px]">
@@ -15,7 +15,7 @@
                     </span>
                 </button>
             </div>
-            <div class="profile__content !mt-[60px] flex gap-[20px]">
+            <div class="profile__content md:!mt-[60px] !mt-[30px] flex gap-[20px]">
                 <div class="profile__sidebar" v-if="!isMobile">
                     <ProfileSidebar />
                 </div>

@@ -3,23 +3,31 @@
         <div class="container">
             <div class="navbar__dropdown-content">
                 <ul class="navbar__dropdown-list">
-                    <li class="navbar__dropdown-li flex gap-[20px] text-right items-center justify-end !mt-[30px]" v-for="link in navLinks" :key="link">
+                    <li class="navbar__dropdown-li" v-for="link in navLinks" :key="link">
+                        <NuxtLink :to="link.path" class="navbar__dropdown-link" @click="emit('closeDropdown')">{{ link.text }}</NuxtLink>
+                        <span class="navbar__dropdown-icon">
+                            <Component :is="link.icon" />
+                        </span>
+                    </li>
+                </ul>
+                <ul class="navbar__dropdown-list">
+                    <li class="navbar__dropdown-li flex gap-[20px] text-right items-center justify-end" v-for="link in profileLinks" :key="link">
                         <RouterLink :to="link.path" class="navbar__dropdown-link !m-0" @click="emit('closeDropdown')">{{ link.text }}</RouterLink>
                         <span class="navbar__dropdown-icon">
                             <Component :is="link.icon" />
                         </span>
                     </li>
                 </ul>
-                <ul class="navbar__dropdown-list" v-if="profile.role === 'MASTER' || profile.role === 'ADMIN'">
-                    <li class="navbar__dropdown-li flex gap-[20px] text-right items-center justify-end !mt-[30px]" v-for="link in masterLinks" :key="link">
+                <ul class="navbar__dropdown-list" v-if="profile.role === 'MASTER' || profile.role === 'ADMIN' || profile.role === 'SUPER_ADMIN'">
+                    <li class="navbar__dropdown-li flex gap-[20px] text-right items-center justify-end" v-for="link in masterLinks" :key="link">
                         <RouterLink :to="link.path" class="navbar__dropdown-link !m-0" @click="emit('closeDropdown')">{{ link.text }}</RouterLink>
                         <span class="navbar__dropdown-icon">
                             <Component :is="link.icon" />
                         </span>
                     </li>
                 </ul>
-                <ul class="navbar__dropdown-list"  v-if="profile.role === 'ADMIN'">
-                    <li class="navbar__dropdown-li flex gap-[20px] text-right items-center justify-end !mt-[30px]" v-for="link in adminLinks" :key="link">
+                <ul class="navbar__dropdown-list"  v-if="profile.role === 'ADMIN' || profile.role === 'SUPER_ADMIN'">
+                    <li class="navbar__dropdown-li flex gap-[20px] text-right items-center justify-end" v-for="link in adminLinks" :key="link">
                         <RouterLink :to="link.path" class="navbar__dropdown-link !m-0" @click="emit('closeDropdown')">{{ link.text }}</RouterLink>
                         <span class="navbar__dropdown-icon">
                             <Component :is="link.icon" />
@@ -28,11 +36,19 @@
                 </ul>
                 <div class="navbar__dropdown-bottom">
                     <div class="navbar__dropdown-help">
-                        <div class="navbar__dropdown-help-link !mt-[150px]" @click="logout">
+                        <div class="navbar__dropdown-help-link" @click="logout">
                             <p class="navbar__dropdown-help-text text-pink-bright">Выйти из аккаунта</p>
                             <span class="navbar__dropdown-help-icon">
                                 <LogoutIcon />
                             </span>
+                        </div>
+                        <div class="navbar__dropdown-help" v-if="userStore.profile.role !== 'USER'">
+                            <a href="https:/t.me/ChertogiGeroev" class="navbar__dropdown-help-link">
+                                <p class="navbar__dropdown-help-text">Помогите мне</p>
+                                <span class="navbar__dropdown-help-icon">
+                                    <HelpIcon />
+                                </span>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -64,11 +80,24 @@
     import EditNewsIcon from '@/shared/icons/profile/sidebar/EditNews.vue';
     import EditTagsIcon from '@/shared/icons/profile/sidebar/EditTags.vue';
     import ApplyNotificationIcon from '@/shared/icons/profile/sidebar/ApplyNotification.vue';
+    import AboutIcon from '@/shared/icons/navbar/login/About.vue';
+    import TariffIcon from '@/shared/icons/navbar/login/Tariff.vue';
+    import TravelIcon from '@/shared/icons/navbar/login/Travel.vue';
+    import NewsIcon from '@/shared/icons/navbar/login/News.vue';
+    import ContactsIcon from '@/shared/icons/navbar/login/Contacts.vue';
 
 
     const emit = defineEmits(['closeDropdown']);
 
     const navLinks = ref([
+        { text: 'О клубе', path: '/', icon: AboutIcon },
+        { text: 'Тарифы', path: '/tariffs', icon: TariffIcon },
+        { text: 'К приключениям', path: '/technical-work', icon: TravelIcon },
+        { text: 'Новости', path: '/news', icon: NewsIcon },
+        { text: 'Контакты', path: '/contacts', icon: ContactsIcon },
+    ])
+
+    const profileLinks = ref([
         { text: 'Профиль', path: '/profile', icon: ProfileIcon },
         { text: 'Мои события', path: '/my-events', icon: MyEventsIcon },
         { text: 'Уведомления', path: '/notifications', icon: NotificationIcon },

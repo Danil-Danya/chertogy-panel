@@ -45,6 +45,8 @@ const resetPassword = async (payload) => {
 
 const getAllUsers = async (params) => {
     try {
+        console.log(params);
+        
         const response = await api.get('/users', {
             params
         });

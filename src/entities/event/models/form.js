@@ -155,8 +155,8 @@ const meetingRules = (form) => ({
             required
         ),
         maxLength: helpers.withMessage(
-            'Максимум 350 символов',
-            maxLength(350)
+            'Максимум 250 символов',
+            maxLength(250)
         ),
     },
 

@@ -25,7 +25,7 @@
 
 <script setup>
 
-    import { ref, onMounted, reactive } from 'vue';
+    import { ref, onMounted, reactive, computed } from 'vue';
 
     import SearchInput from '@/shared/ui/SearchInput.vue';
     import Button from '@/shared/ui/Button.vue';
@@ -37,36 +37,37 @@
     
     const userStore = useUserStore();
 
-    const search = ref('');
+    const props = defineProps({
+        filter: Object
+    });
+
+    const search = computed({
+        get: () => props.filter.search,
+        set: (v) => props.filter.search = v
+    });
 
     const roleFilter = ref([
-        { text: 'Пользователь', value: 'USER', checked: false },
-        { text: 'Админ', value: 'ADMIN', checked: false },
-        { text: 'Мастер', value: 'MASTER', checked: false },
+        { text: 'Пользователь', value: 'USER', checked: props.filter.roles.includes('USER') },
+        { text: 'Админ', value: 'ADMIN', checked: props.filter.roles.includes('ADMIN') },
+        { text: 'Мастер', value: 'MASTER', checked: props.filter.roles.includes('MASTER') },
     ]);
 
-    const filter = {
-        page: 1,
-        limit: 100,
-    }
 
     onMounted(async () => {
-        await userStore.fetchUsers(filter);
+        await userStore.fetchUsers(props.filter);
     });
 
     const updateFilter = async () => {
-        const selectedRoles = roleFilter.value
+        props.filter.roles = roleFilter.value
             .filter(r => r.checked)
             .map(r => r.value);
 
-        filter.roles = selectedRoles;
+        props.filter.page = 1; 
 
-        filter.searchField = 'login';
-        filter.search = search.value;
-
-        await userStore.fetchUsers(filter);
+        await userStore.fetchUsers(props.filter);
     }
 
     const debouncedUpdateFilter = debounce(updateFilter, 100);
+
 
 </script>

@@ -152,7 +152,7 @@
         {
             title: 'Провёл',
             value: '0 событий',
-            roles: ['MASTER', 'ADMIN'],
+            roles: ['MASTER', 'ADMIN', 'SUPER_ADMIN'],
             color: 'linear-gradient(257deg, rgba(210, 60, 72, 0.20) -4.79%, rgba(58, 58, 58, 0.20) 86.4%)'
         },
     ])

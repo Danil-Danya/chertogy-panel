@@ -1,8 +1,18 @@
 <template>
     <div class="events__card" :class="{
         'draft': isDraft,
-        'not-allowed': !isAllowed
+        'not-allowed': !isAllowed,
+        'finished': isFinished,
+        'canceled': isCanceled
     }">
+        <div 
+            :class="{
+                'events__card-closed': isFinished,
+                'events__card-canceled': isCanceled
+            }" 
+            v-if="isFinished || isCanceled"
+        >
+        </div>
         <div class="events__card-content">
             <div class="events__card-top">
                 <div class="events__card-head">
@@ -38,6 +48,9 @@
                         >
                             <PriceIcon />
                             {{ price }} ₽
+                            <span class="events__card-price-discount" v-if="originalPrice">
+                                {{ originalPrice }} ₽
+                            </span>
                         </span>
                         <span class="events__card-price" v-if="discount" 
                             :class="{
@@ -55,6 +68,14 @@
                         >
                             <WaitingIcon />
                             Ждёт утверждения
+                        </span>
+                        <span class="events__card-allowed" v-if="isAllowed && subscribes === 0"
+                            :class="{
+                                'allowed': isAllowed
+                            }"
+                        >
+                            <AllowedIcon />
+                            Утверждено
                         </span>
                         <span class="events__card-draft" v-if="isDraft" 
                             :class="{
@@ -90,27 +111,52 @@
                     </span>
                     <h3 class="events__card-date-title">{{ date }}</h3>
                 </div>
-                <div class="events__card-buttons">
-                    <div class="events__buttons-user events__card-buttons" v-if="page === 'my_events'">
-                        <a :href="`https://чертоги-героев.рф/events/${slug}`" class="events__card-link">Подробнее</a>
-                        <button class="events__card-button !bg-red-500" @click="unSubscribe" v-if="!isFinished">Отписаться</button>
-                        <button class="events__card-button !bg-gray-700" v-else>Событие завершенно</button>
+                <div class="events__card-bottom-content">
+                    <div class="events__card-buttons">
+                        <div class="events__buttons-user events__card-buttons" v-if="page === 'my_events'">
+                            <a :href="`https://чертоги-героев.рф/events/${slug}`" class="events__card-link">Подробнее</a>
+                            <button class="events__card-button !bg-red-500" @click="unSubscribe" v-if="!isFinished">
+                                <span class="events__card-icon">
+                                    <UnsubscribeIcon />
+                                </span>
+                                Отписаться
+                            </button>
+                            <button class="events__card-button finished" @click="subscribeAction" v-if="isFinished">
+                                <span>Событие завершено</span>
+                            </button>
+                        </div>
+                        <div class="events__buttons-master events__card-buttons" v-if="page === 'master_events'">
+                            <a :href="`https://чертоги-героев.рф/events/${slug}`" class="events__card-link" v-if="!isDraft && !isFinished && !isCanceled">Подробнее</a>
+                            <button class="events__card-button draft" @click="toUpdate" v-if="isDraft">
+                                <span class="events__card-icon">
+                                    <EditDraftIcon />
+                                </span>
+                                Редактировать черновик
+                            </button>
+                            <button class="events__card-button" @click="toUpdate" v-else-if="!isFinished && !isCanceled">
+                                <span class="events__card-icon">
+                                    <EditIcon />
+                                </span>
+                                Редактировать
+                            </button>
+                            <button class="events__card-button finished" @click="subscribeAction" v-if="isCanceled">
+                                <span>Событие Отменено</span>
+                            </button>
+                            <button class="events__card-button finished" @click="subscribeAction" v-if="isFinished">
+                                <span>Событие завершено</span>
+                            </button>
+                        </div>
+                        <div class="events__buttons-master events__card-buttons" v-if="page === 'approval_events' && !isDraft">
+                            <a :href="`https://чертоги-героев.рф/events/${slug}`" class="events__card-link">Подробнее</a>
+                            <button class="events__card-button" @click="isApproveModalOpen = true">Утвердить событие</button>
+                        </div>
                     </div>
-                    <div class="events__buttons-master events__card-buttons" v-if="page === 'master_events'">
-                        <a :href="`https://чертоги-героев.рф/events/${slug}`" class="events__card-link">Подробнее</a>
-                        <button class="events__card-button draft" @click="toUpdate" v-if="isDraft">Редактировать черновик</button>
-                        <button class="events__card-button" @click="toUpdate" v-else>Редактировать</button>
+                    <div class="events__card-subscribes" v-if="!isMobile">
+                        <span>
+                            <SubscribeIcon />
+                        </span>
+                        <p class="events__card-counter">{{ subscribes }}/{{ maxSubscribes }}</p>
                     </div>
-                    <div class="events__buttons-master events__card-buttons" v-if="page === 'approval_events'">
-                        <a :href="`https://чертоги-героев.рф/events/${slug}`" class="events__card-link">Подробнее</a>
-                        <button class="events__card-button" @click="isApproveModalOpen = true">Утвердить событие</button>
-                    </div>
-                </div>
-                <div class="events__card-subscribes" v-if="!isMobile">
-                    <span>
-                        <SubscribeIcon />
-                    </span>
-                    <p class="events__card-counter">{{ subscribers?.length }}/{{ maxSubscribes }}</p>
                 </div>
             </div>
         </div>
@@ -139,6 +185,11 @@
     import ApproveModal from '@/features/modals/ApproveModal.vue';
     import WaitingIcon from '@/shared/icons/events/cards/Waiting.vue';
     import DraftIcon from '@/shared/icons/events/cards/Draft.vue';
+
+    import EditDraftIcon from '@/shared/icons/events/cards/EditDraft.vue';
+    import EditIcon from '@/shared/icons/events/cards/Edit.vue';
+    import UnsubscribeIcon from '@/shared/icons/events/cards/Unsubscribe.vue';
+    import AllowedIcon from '@/shared/icons/events/cards/Allowed.vue';
 
     const isMobile = useIsMobile();
 
@@ -297,6 +348,11 @@
         originalPrice: {
             type: Number,
             required: false
+        },
+
+        isCanceled: {
+            type: Boolean,
+            required: true
         }
     })
     
@@ -304,8 +360,6 @@
     const isFinished = computed(() => {
         return new Date(props.endTime) < new Date()
     });
-
-    console.log(isFinished.value);
     
 </script>
 

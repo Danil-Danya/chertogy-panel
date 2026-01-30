@@ -11,17 +11,28 @@
                 </RouterLink>
             </div>
         </div>
+        <Pagination
+            v-if="newsStore?.news?.totalPages > 1"
+            v-model:page="filter.page"
+            :total-pages="newsStore.news.totalPages"
+        />
     </section>
 </template>
 
 <script setup>
 
-    import { computed, onMounted, ref } from 'vue';
+    import { computed, onMounted, ref, reactive, watch } from 'vue';
     import { useNewsStore } from '@/entities/news/model/store';
 
     import Button from '@/shared/ui/Button.vue';
+    import Pagination from '@/features/paginate/Pagination.vue';
 
     const imageUrl = import.meta.env.VITE_APP_IMAGE_URL;
+
+    const filter = reactive({
+        page: 1,
+        limit: 4
+    });
 
     const newsStore = useNewsStore();
     const newsList = computed(() => newsStore.news.rows);
@@ -29,9 +40,11 @@
     const innerWidth = ref(0);
     
     onMounted(async () => {
-        await newsStore.fetchNews();
+        await newsStore.fetchNews(filter);
 
         innerWidth.value = window.innerWidth;
     });
+
+    watch(() => filter.page, async () => await newsStore.fetchNews(filter));
 
 </script>

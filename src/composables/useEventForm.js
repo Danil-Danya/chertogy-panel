@@ -19,15 +19,17 @@ export function useEventForm() {
         creatorId: null, 
         title: '',
         isAllowed: false,
+        //isCanceled: false,
         maxPlayers: null,
         fullDescription: '',
         shortDescription: '',
         place: null,
         price: null,
-        discount: null,
+        discount: 0,
         date: null,
         startTime: null,
         endTime: null,
+        timeRange: null,
         aboutCreator: '',
         registrationType: null,
         file: null,
@@ -41,8 +43,23 @@ export function useEventForm() {
     });
 
     const fillForm = (event) => {
-        const start = event?.startTime ? new Date(event.startTime) : null;
-        const end   = event?.endTime   ? new Date(event.endTime)   : null;
+        const startDate = event?.startTime ? new Date(event.startTime) : null;
+        const endDate   = event?.endTime   ? new Date(event.endTime)   : null;
+
+        form.date = startDate ? new Date(startDate) : null;
+
+        form.timeRange = startDate && endDate ? [
+            { 
+                hours: startDate.getHours(),      
+                minutes: startDate.getMinutes(),   
+                seconds: startDate.getSeconds()     
+            },
+            { 
+                hours: endDate.getHours(),
+                minutes: endDate.getMinutes(),
+                seconds: endDate.getSeconds()
+            }
+        ] : null;
 
         form.title = event?.title;
         form.system = event?.game?.system;
@@ -58,17 +75,16 @@ export function useEventForm() {
         form.discount = event?.discount;
         form.maxPlayers = event?.maxPlayers;
         form.registrationType = event?.registrationType;
-        form.startTime = event?.startTime,
-        form.endTime = event?.endTime;
-        form.date = event?.startTime;
+        form.playerLevel = event.game.playerLevel,
+        form.necessaryPlayerPreparation = event.game.necessaryPlayerPreparation
 
         if (event?.previewPath) {
             uploadedPreview.value = event.previewPath;
         }
 
-
         form.creatorId = event.creatorId;
     };
+
 
 
     const categories = computed(() => tagsStore.tagsCategories?.rows || []);
@@ -104,10 +120,19 @@ export function useEventForm() {
         ];
     });
 
+    const cancelEvent = async (id, gameId) => {
+        const formData = prepareEventFormData(form, uploadedPreview.value);
 
+        formData.append('isCanceled', true);
+
+        const canceledGame = await updateGameEvent(id, gameId, formData);
+
+        if (canceledGame) {
+            router.replace('/master-events')
+        }
+    }
 
     const createGame = async (isDraft) => {
-        console.log(form)
         const formData = prepareEventFormData(form, uploadedPreview.value);
         const newGame = isDraft ? await createGameDraft(formData) : await createGameEvent(formData);
 
@@ -116,8 +141,11 @@ export function useEventForm() {
         }
     };
 
-    const updateGame = async (id, gameId) => {
+    const updateGame = async (id, gameId, isDraft) => {
         const formData = prepareEventFormData(form, uploadedPreview.value);
+
+        formData.append('isDraft', isDraft);
+
         const newGame = await updateGameEvent(id, gameId, formData);
 
         if (newGame) {
@@ -143,6 +171,7 @@ export function useEventForm() {
         results,
         fillForm,
         updateGame,
+        cancelEvent,
         createGame
     };
 }

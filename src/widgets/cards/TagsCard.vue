@@ -3,7 +3,7 @@
         <div class="tags__card-content">
             <h2 class="tags__card-name text-[24px] text-purple-light">{{ category.name }}</h2>
             <div class="tags__card-container h-[300px] overflow-y-scroll !mt-[20px]">
-                <div class="tags__item flex justify-between !mb-[10px]" v-for="(tag, index) in tags" :key="tag">
+                <div class="tags__item flex justify-between !mb-[10px]" v-for="(tag) in tags" :key="tag">
                     <div class="tags__item-left">
                         <p class="text !text-[14px]">{{ tag.fullName }}</p>
                         <p class="text !text-[14px] !text-gray-mid">{{ tag.shortName }}</p>

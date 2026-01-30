@@ -1,14 +1,15 @@
 <template>
     <div class="user__dropdown w-[260px] bg-black rounded-[10px] gap-[30px] !p-[15px]">
-        <ul class="user__action-list">
-            <li v-for="item in rolesList" :key="item" class="flex gap-[10px] justify-start !mb-[10px] cursor-pointer" @click="switchUserRole(item.role)">
+        <ul class="user__action-list" v-if="user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN' || userStore.profile.role === 'SUPER_ADMIN'">
+            <li v-for="item in rolesList" :key="item.role" class="flex gap-[10px] justify-start !mb-[10px] cursor-pointer" @click="switchUserRole(item.role)">
                 <span class="user__dropdown-icon">
                     <Component :is="item.icon" />
                 </span>
                 <p class="text">{{ item.action }}</p>
             </li>
+
         </ul>
-        <ul class="user__action-list !mt-[30px]">
+        <ul class="user__action-list !mt-[30px]" v-if="user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN' || userStore.profile.role === 'SUPER_ADMIN'">
             <li v-for="item in userSettingList" :key="item" class="flex gap-[10px] justify-start !mb-[10px] cursor-pointer" @click="toggleDeleteModal">
                 <span class="user__dropdown-icon">
                     <Component :is="item.icon" />
@@ -16,6 +17,7 @@
                 <p class="text">{{ item.action }}</p>
             </li>
         </ul>
+        <p class="text" v-else>Операции над пользователем не доступны</p>
         <Transition name="modal">
             <DeleteModal v-if="isActiveDeleteModal"
                 :title='`Удалить пользователя: "${user.login} ${user.profile.name}?"`'
@@ -36,11 +38,14 @@
     import DeleteIcon from '@/shared/icons/user/Delete.vue';
     import DeleteModal from '@/features/modals/DeleteModal.vue';
 
-    import { ref } from 'vue';
+    import { onMounted, ref, computed } from 'vue';
     import { useRouter } from 'vue-router';
     import { updateUserById, deleteUserById } from '@/entities/users/lib/api';
 
+    import { useUserStore } from '@/entities/users/model/store';
+
     const isActiveDeleteModal = ref(false);
+    const userStore = useUserStore();
 
     const toggleDeleteModal = () => {
         isActiveDeleteModal.value = !isActiveDeleteModal.value;
@@ -59,7 +64,8 @@
             icon: AdminIcon,
             action: 'Назначить админом',
             color: 'red',
-            role: 'ADMIN'
+            role: 'ADMIN',
+            isRules: true
         },
 
         {
@@ -112,5 +118,9 @@
             console.log(error);
         }
     }
+
+    onMounted(async () => {
+        await userStore.fetchProfile();
+    })
 
 </script>

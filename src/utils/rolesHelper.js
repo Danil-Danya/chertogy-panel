@@ -16,6 +16,12 @@ const rolesHelper = {
         eng: 'Admin',
         ru: 'Админ'
     },
+
+    super_admin: {
+        original: 'SUPER_ADMIN',
+        eng: 'SUPER_ADMIN',
+        ru: 'Вс.админ'
+    }
 }
 
 export default rolesHelper;

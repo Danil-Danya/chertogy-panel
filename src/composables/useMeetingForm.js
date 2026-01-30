@@ -22,6 +22,7 @@ export function useMeetingForm() {
         date: null,
         startTime: null,
         endTime: null,
+        timeRange: null,
 
         place: null,
         price: null,
@@ -33,6 +34,24 @@ export function useMeetingForm() {
     });
 
     const fillForm = (event) => {
+        const startDate = event?.startTime ? new Date(event.startTime) : null;
+        const endDate   = event?.endTime   ? new Date(event.endTime)   : null;
+
+        form.date = startDate ? new Date(startDate) : null;
+
+        form.timeRange = startDate && endDate ? [
+            { 
+                hours: startDate.getHours(),      
+                minutes: startDate.getMinutes(),   
+                seconds: startDate.getSeconds()     
+            },
+            { 
+                hours: endDate.getHours(),
+                minutes: endDate.getMinutes(),
+                seconds: endDate.getSeconds()
+            }
+        ] : null;
+
         form.title = event?.title;
         form.shortDescription = event?.shortDescription;
         form.fullDescription = event?.fullDescription;
@@ -74,6 +93,18 @@ export function useMeetingForm() {
         ];
     });
 
+    const cancelEvent = async (id) => {
+        const formData = prepareEventFormData(form, uploadedPreview.value);
+
+        formData.append('isCanceled', true);
+
+        const canceledMeeting = await updateMeetingEvent(id, formData);
+
+        if (canceledMeeting) {
+            router.replace('/master-events')
+        }
+    }
+
     const createMeeting = async () => {
         const formData = prepareEventFormData(form, uploadedPreview.value);
         const created = await createMeetingEvent(formData);
@@ -83,9 +114,11 @@ export function useMeetingForm() {
         }
     };
 
-    const updateMeeting = async (id) => {
-        
+    const updateMeeting = async (id, isDraft) => {
         const formData = prepareEventFormData(form, uploadedPreview.value);
+
+        formData.append('isDraft', isDraft);
+        
         const newMeeting = await updateMeetingEvent(id, formData);
 
         if (newMeeting) {
@@ -104,6 +137,7 @@ export function useMeetingForm() {
         results,
         fillForm,
         updateMeeting,
+        cancelEvent,
         createMeeting
     };
 }

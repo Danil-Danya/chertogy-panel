@@ -47,8 +47,6 @@ export const mapEventToCard = (event) => {
     const discountedPrice = hasDiscount
         ? Math.round(basePrice * (1 - discount / 100))
         : basePrice;
-
-    console.log(discountedPrice);
     
 
     return {
@@ -56,6 +54,7 @@ export const mapEventToCard = (event) => {
         slug: event.slug,
         title: event.title,
         type: event.type,
+        isCanceled: event.isCanceled,
 
         eventType: event.type === 'GAME' ? 'Игровая сессия' : 'Событие',
         authorMark: event.game?.system,

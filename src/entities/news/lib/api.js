@@ -1,13 +1,9 @@
 import api from "@/api/axios.init";
 
-const getNews = async () => {
+const getNews = async (params) => {
     try {
-        // временно захардкодил большой лимит, чтобы получить все новости сразу
         const response = await api.get('/news', {
-            params: {
-                limit: 100000,
-                page: 1
-            }
+            params
         });
         return response.data;
     }

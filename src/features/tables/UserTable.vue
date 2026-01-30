@@ -45,7 +45,8 @@
                             {
                                 'bg-blue-mid': user.role === 'USER',
                                 'bg-green-dark': user.role === 'MASTER',
-                                'bg-red-bright': user.role === 'ADMIN'
+                                'bg-red-bright': user.role === 'ADMIN',
+                                'bg-purple-mid': user.role === 'SUPER_ADMIN'
                             }
                         ]"
                         class="text !p-[10px_5px] flex justify-center items-center rounded-[5px]"

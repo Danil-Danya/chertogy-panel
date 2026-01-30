@@ -137,7 +137,7 @@ const router = createRouter({
                 layout: 'profile',
                 title: 'Новости',
                 auth: 'true',
-                roles: ['ADMIN']
+                roles: ['ADMIN', 'SUPER_ADMIN']
             }
         },
         {
@@ -147,7 +147,7 @@ const router = createRouter({
             meta: {
                 layout: 'form',
                 auth: 'true',
-                roles: ['ADMIN']
+                roles: ['ADMIN', 'SUPER_ADMIN']
             }
         },
         {
@@ -157,7 +157,7 @@ const router = createRouter({
             meta: {
                 layout: 'form',
                 auth: 'true',
-                roles: ['ADMIN']
+                roles: ['ADMIN', 'SUPER_ADMIN']
             }
         },
         {
@@ -176,7 +176,7 @@ const router = createRouter({
                 layout: 'profile',
                 title: 'База пользователей',
                 auth: 'true',
-                roles: ['ADMIN']
+                roles: ['ADMIN', 'SUPER_ADMIN']
             }
         },
         {
@@ -187,7 +187,7 @@ const router = createRouter({
                 layout: 'profile',
                 title: 'Просмотр Тегов',
                 auth: 'true',
-                roles: ['ADMIN']
+                roles: ['ADMIN', 'SUPER_ADMIN']
             }
         },
         {
@@ -197,7 +197,7 @@ const router = createRouter({
             meta: {
                 layout: 'form',
                 auth: 'true',
-                roles: ['ADMIN']
+                roles: ['ADMIN', 'SUPER_ADMIN']
             }
         },
         {
@@ -207,7 +207,7 @@ const router = createRouter({
             meta: {
                 layout: 'form',
                 auth: 'true',
-                roles: ['ADMIN']
+                roles: ['ADMIN', 'SUPER_ADMIN']
             }
         },
         {
@@ -218,7 +218,7 @@ const router = createRouter({
                 layout: 'profile',
                 title: 'События (мастера)',
                 auth: true,
-                roles: ['ADMIN', 'MASTER']
+                roles: ['ADMIN', 'MASTER', 'SUPER_ADMIN']
             }
         },
         {
@@ -229,7 +229,7 @@ const router = createRouter({
                 layout: 'form',
                 isUpdate: true,
                 auth: 'true',
-                roles: ['ADMIN', 'MASTER']
+                roles: ['ADMIN', 'MASTER', 'SUPER_ADMIN']
             }
         },
         {
@@ -241,7 +241,7 @@ const router = createRouter({
                 isApproval: true,
                 title: 'Утверждение событий',
                 auth: 'true',
-                roles: ['ADMIN',]
+                roles: ['ADMIN', 'SUPER_ADMIN']
             }
         },
         // {

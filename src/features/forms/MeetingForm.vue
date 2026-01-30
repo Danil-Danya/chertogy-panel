@@ -26,7 +26,7 @@
                         :counter="`${textAreaCounter.shortDescription.usedSymbols}/${textAreaCounter.shortDescription.maxSymbols}`"
                         :message="
                             fieldMessageEvent(vEvent$.shortDescription) 
-                            || { type: 'warning', text: 'Не более 350 символов, включая пробелы' }
+                            || { type: 'warning', text: 'Не более 250 символов, включая пробелы' }
                         "
                         @blur="vEvent$.shortDescription.$touch()"
                     />
@@ -92,8 +92,10 @@
                         lang="ru"
                         :theme="'dark'"
                         :action-row="actionsRow"
+                        :min-date="now"
                         @blur="vEvent$.date.$touch()"
                         class=" border-[1px]"
+                        :time-config="{ enableTimePicker: false }"
                         :class="{
                             '!border-red-500': fieldMessageEvent(vEvent$.date)?.type === 'error',
                             '!border-green-500': fieldMessageEvent(vEvent$.date)?.type === 'success'
@@ -105,47 +107,29 @@
                 </div>
 
                 <div class="data__picker-container w-full">
-                    <label :for="id" class="text-label text-white xl:text-[22px] block !mb-[10px]">Время начала</label>
+                    <label class="text-label text-white xl:text-[22px] block !mb-[10px]">Время события</label>
                     <VueDatePicker 
-                        dark="true"
+                        v-model="form.timeRange"          
                         :locale="ru"
-                        v-model="form.startTime"
                         format="HH:mm"
-                        @update:model-value="v => console.log('END VALUE:', v)"
                         iso
                         lang="ru"
+                        dark="true"
                         :theme="'dark'"
                         time-picker
+                        range                               
                         :action-row="actionsRow"
-                        class=" border-[1px]"
+                        class="border-[1px]"
                         :class="{
-                            '!border-red-500': fieldMessageEvent(vEvent$.startTime)?.type === 'error',
-                            '!border-green-500': fieldMessageEvent(vEvent$.startTime)?.type === 'success'
+                            '!border-red-500': fieldMessageEvent(vEvent$.startTime)?.type === 'error' || fieldMessageEvent(vEvent$.endTime)?.type === 'error',
+                            '!border-green-500': fieldMessageEvent(vEvent$.startTime)?.type === 'success' && fieldMessageEvent(vEvent$.endTime)?.type === 'success'
                         }"
+                        :disabled-time="disableEndBeforeStart" 
+                        @blur="vEvent$.startTime.$touch(); vEvent$.endTime.$touch()"
                     />
                     <p v-if="vEvent$.startTime.$error" class="text-red-accent text-sm mt-1">
                         {{ fieldMessageEvent(vEvent$.startTime)?.text }}
                     </p>
-                </div>
-
-                <div class="data__picker-container w-full">
-                    <label :for="id" class="text-label text-white xl:text-[22px] block !mb-[10px]">Ожидаемое окончание</label>
-                    <VueDatePicker 
-                        dark="true"
-                        :locale="ru"
-                        v-model="form.endTime"
-                        format="HH:mm"
-                        iso
-                        lang="ru"
-                        :theme="'dark'"
-                        time-picker
-                        :action-row="actionsRow"
-                        class=" border-[1px]"
-                        :class="{
-                            '!border-red-500': fieldMessageEvent(vEvent$.endTime)?.type === 'error',
-                            '!border-green-500': fieldMessageEvent(vEvent$.endTime)?.type === 'success'
-                        }"
-                    />
                     <p v-if="vEvent$.endTime.$error" class="text-red-accent text-sm mt-1">
                         {{ fieldMessageEvent(vEvent$.endTime)?.text }}
                     </p>
@@ -228,13 +212,13 @@
             </div>
 
             <div class="event__form-buttons flex gap-[40px] md:flex-nowrap flex-wrap" v-if="!isUpdate">
-                <Button color="green" text="Отправить на утверждение" @click="submitEvent(false)" />
-                <Button color="gray" text="Сохранить в черновики" @click="submitEvent(true)" />
+                <Button color="green" text="Отправить на утверждение" @click="submitEvent(false)" :loading="buttonLoading" />
+                <Button color="gray" text="Сохранить в черновики" @click="submitEvent(true)" :loading="buttonLoading" />
             </div>
-            <div class="event__form-buttons flex gap-[40px] md:flex-nowrap flex-wrap" v-else>
-                <Button color="green" text="Отправить на утверждение" @click="submitEvent(false)" />
-                <Button color="gray" text="Сохранить в черновики" @click="submitEvent(true)" v-if="eventStore.event?.isDraft" />
-                <Button color="red" text="Удалить событие" @click="submitEvent" />
+            <div class="event__form-buttons flex gap-4 flex-nowrap" v-else>
+                <Button color="green" :text="eventStore.event?.isDraft ? 'Отправить на утверждение' : 'Обновить событие'" @click="submitEvent(false)" :loading="buttonLoading" />
+                <Button color="gray" :text="eventStore.event?.isDraft ? 'Сохранить в черновик' : 'Отменить событие'" @click="eventStore.event?.isDraft ? submitEvent(true) : cancelEvent(eventStore.event.id)" :loading="buttonLoading" />
+                <Button color="red" text="Удалить событие" @click="openDeleteModal" />
             </div>
 
             <Transition name="modal">
@@ -253,7 +237,7 @@
 
 <script setup>
 
-    import { computed, ref, onMounted } from 'vue';
+    import { computed, ref, onMounted, watch } from 'vue';
     import { useRoute, useRouter } from 'vue-router';
 
     import { VueDatePicker } from '@vuepic/vue-datepicker';
@@ -277,7 +261,7 @@
     import { deleteEvent } from '@/entities/event/lib/api';
 
     const actionsRow = {
-        selectBtnLabel: 'Выбрать дату',
+        selectBtnLabel: 'Выбрать',
         cancelBtnLabel: 'Закрыть',
     }
     
@@ -316,20 +300,20 @@
     const submitEvent = async (isDraft) => {
         vEvent$.value.$touch();
         
-        
         if (vEvent$.value.$invalid || !uploadedPreview.value) {
             isSubmitAttempted.value = true;
             return;
         }
-        console.log(123);
 
         buttonLoading.value = true;
 
+        console.log(isDraft);
+        
         if (route.path.includes('create')) {
             await createMeeting(isDraft);
         }
         else {
-            await updateMeeting(eventStore.event.id);
+            await updateMeeting(eventStore.event.id, isDraft);
         }
     };
 
@@ -339,13 +323,14 @@
         results,
         fillForm, 
         createMeeting,
+        cancelEvent,
         updateMeeting
     } = useMeetingForm();
 
     const textAreaCounter = computed(() => {
         return {
             shortDescription: {
-                maxSymbols: 350,
+                maxSymbols: 250,
                 usedSymbols: form.shortDescription.length
             },
 
@@ -375,6 +360,20 @@
     
     const vEvent$ = validateEvent.v$;
     const fieldMessageEvent = validateEvent.fieldMessage;
+
+    const minDate = ref(null);
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - 15); 
+    minDate.value = now;
+
+    watch(
+        () => form.timeRange,
+        (val) => {
+            form.startTime = val[0];
+            form.endTime = val[1];
+        },
+        { deep: true }
+    );
 
     const onFileSelected = (file) => {
         uploadedPreview.value = file; 

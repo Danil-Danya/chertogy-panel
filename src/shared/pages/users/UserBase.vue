@@ -9,9 +9,14 @@
                    backdrop-filter: blur(10px);
                 "
         >
-            <UserFilter />
+            <UserFilter :filter="filter" />
             <UserTable v-if="userStore.users?.rows.length"
                 :users="userStore.users.rows" 
+            />
+            <Pagination
+                v-if="userStore.users && userStore.users.totalPages > 1"
+                v-model:page="filter.page"
+                :total-pages="userStore.users.totalPages"
             />
         </div>
     </section>
@@ -19,18 +24,32 @@
 
 <script setup>
 
-    import { onMounted, watch } from 'vue';
+    import { onMounted, watch, reactive } from 'vue';
     import { useUserStore } from '@/entities/users/model/store';
 
     import UserTable from '@/features/tables/UserTable.vue';
     import UserFilter from '@/features/filters/UserFilter.vue';
+    import Pagination from '@/features/paginate/Pagination.vue';
     
     const userStore = useUserStore();
+
+    const filter = reactive({
+        page: 1,
+        limit: 10,
+        search: '',
+        searchField: 'login',
+        roles: []
+    });
 
     watch(
         () => userStore.users,
         { deep: true }
     )
+
+    watch(() => filter.page, async () => {
+        await userStore.fetchUsers(filter);
+    });
+
 
     // onMounted(async () => {
     //     await userStore.fetchUsers();

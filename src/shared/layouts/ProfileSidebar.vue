@@ -17,7 +17,7 @@
             </component>
         </li>
     </ul>
-    <div class="master__content" v-if="profile.role === 'MASTER' || profile.role === 'ADMIN'">
+    <div class="master__content" v-if="profile.role === 'MASTER' || profile.role === 'ADMIN' || profile.role === 'SUPER_ADMIN'">
         <h2 class="title !text-left !text-[32px] !m-[20px_0]">Мастер панель</h2>
         <ul class="profile__sidebar-list w-[280px]">
             <li class="profile__sidebar-li" v-for="link in masterLinks" :key="link">
@@ -34,7 +34,7 @@
             </li>
         </ul>
     </div>
-    <div class="admin__content" v-if="profile.role === 'ADMIN'">
+    <div class="admin__content" v-if="profile.role === 'ADMIN' || profile.role === 'SUPER_ADMIN'">
         <h2 class="title !text-left !text-[32px] !m-[20px_0]">Админ панель</h2>
         <ul class="profile__sidebar-list w-[280px]">
             <li class="profile__sidebar-li" v-for="link in adminLinks" :key="link">
